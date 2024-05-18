@@ -1,20 +1,20 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useWindowDimensions } from 'react-native';
 
 
-const DisplayAttendanceHead = ({data}) => {
+const DisplayAttendanceHead = ({data, displayItem}) => {
     const { width, height } = useWindowDimensions();
     return (
         <View style={[styles.abox, {height : height/6}]}>
             <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-                <Text style={styles.heading}>BCA 1st sem</Text>
+                <Text style={styles.heading}>{displayItem && displayItem.department != undefined ? displayItem.department : "Dummy"} {displayItem && displayItem.semester != undefined ? displayItem.semester : "Dummy"} sem</Text>
                 <View style={styles.headBox}>
                     <View style={styles.iconBox}>
                         <Entypo name="open-book" size={20} color="black" />
-                        <Text style={styles.subheading}>Web development</Text>
+                        <Text style={styles.subheading}>{displayItem && displayItem.subject != undefined ? displayItem.subject : "Dummy"}</Text>
                     </View>
                     <View style={styles.iconBox}>
                         <FontAwesome5 name="book-reader" size={20} color="black" />

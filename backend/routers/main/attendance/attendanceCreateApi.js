@@ -7,6 +7,7 @@ attendanceRouter.post('/create-subject', attendanceController.addSubject)
 attendanceRouter.post('/create-month', attendanceController.addMonth)
 attendanceRouter.post('/create-attendancesheet', attendanceController.createAttendanceSheet)
 attendanceRouter.post('/set-attendance', attendanceController.setAttendance)
+attendanceRouter.post('/verify-attendance', attendanceController.getAttendanceVerify)
 
 // 1. create createAttendanceSheet.
 // 2. create subject.

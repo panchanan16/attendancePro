@@ -17,7 +17,7 @@ export default function LoginScreen({ navigation }) {
 
                 <LoginForm head={loginType} nav={navigation} />
 
-                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 60 }}>
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 80 }}>
                     <View style={{ zIndex: 10, width: "100%", display: 'flex', flexDirection: 'column', marginTop: -85, justifyContent: 'center', alignItems: 'center', gap: 20 }}>
                         <Text style={{ fontWeight: 'bold', color: "#102B77" }}>Login As</Text>
                         <View style={{ width: "100%", display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>

@@ -1,17 +1,21 @@
-import { View, Text, TextInput, TouchableOpacity, Alert} from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { styles } from '../screen/login/loginStyle'
 import { useState } from 'react'
+import { _POST } from '../../utils/apiReq'
 
 
-export default function LoginForm({head, nav}) {
+export default function LoginForm({ head, nav }) {
     const [email, setemail] = useState()
     const [password, setpassword] = useState()
 
-    function loginUser() {
-        if (email && password && email === 'email.com' && password === '123') {
-            nav.navigate('Main')
+    async function loginUser() {
+        if (email && password) {
+            const req = await _POST('auth/apiv1/admin-login', { email, password })
+            if (req && req.token) {
+                nav.navigate('Main')
+            } else { Alert.alert('Oops! Wrong crendentials 👎') }
         } else {
-            Alert.alert('Oops! Wrong crendentials')
+            Alert.alert('Please! Enter your crendentials 👌')
         }
     }
     return (
@@ -35,6 +39,7 @@ export default function LoginForm({head, nav}) {
                     placeholderTextColor="#888888"
                     placeholder="Enter Your Password"
                     style={styles.inputText}
+                    secureTextEntry={true}
                 />
                 <TouchableOpacity style={styles.button} onPress={loginUser}>
                     <Text style={{ color: "white", fontWeight: 'bold' }}>Login</Text>

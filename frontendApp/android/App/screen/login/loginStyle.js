@@ -4,9 +4,7 @@ export const styles = StyleSheet.create({
     loginBox: {
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         gap: 20,
-        justifyContent: "center",
         backgroundColor: "white",
         width: '100%',
         height: '60%',
@@ -18,7 +16,8 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 10,
         alignItems: "baseline",
-        justifyContent: "center",
+        marginRight: 80
+    
     },
     loginTextHead: {
         color: "#102B77",

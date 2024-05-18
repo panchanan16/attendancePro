@@ -43,8 +43,7 @@ const attendanceGetControl = {
         )
             promises.push(perquery)
         })
-
-      
+  
       Promise.all(promises).then((data)=>{
         res.status(200).send(data)
       }).catch((error)=>{

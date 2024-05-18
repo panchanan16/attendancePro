@@ -55,6 +55,17 @@ const attendanceCreateControl = {
         res.status(200).send({ msg: "month added successfully"})  
     },
 
+    getAttendanceVerify: async function(req, res) {
+        const {sub, date} = req.body
+        const attendance = mongoose.model(req.query.q, attendanceSchema);
+        const response = await attendance.find({'attendance.sub': sub, 'attendance.lastattendance': date }, {rollno: 1}) 
+        if(response && response.length > 0) {
+            return res.status(500).send({result: false});
+        }
+        console.log(response);
+        return res.status(200).send({result: true});
+    },
+
     setAttendance: async function (req, res) {
         const attendance = mongoose.model(req.query.q, attendanceSchema);
         req.body.attendance.forEach(async (element) => {

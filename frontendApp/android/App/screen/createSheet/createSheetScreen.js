@@ -9,26 +9,46 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { styles, style } from './createSheetStyle';
+import { _POST } from '../../../utils/apiReq';
 
-const CreateSheetScreen = ({navigation}) => {
-    const data = [
-        { label: 'Item 1', value: '1' },
-        { label: 'Item 2', value: '2' },
-        { label: 'Item 3', value: '3' },
-        { label: 'Item 4', value: '4' },
-        { label: 'Item 5', value: '5' },
-        { label: 'Item 6', value: '6' },
-        { label: 'Item 7', value: '7' },
-        { label: 'Item 8', value: '8' },
+const CreateSheetScreen = ({ navigation }) => {
+    const departmentList = [
+        { label: 'BCA', value: 'bca_' },
+        { label: 'BBA', value: 'bba_' }
+    ];
+    const semesterList = [
+        { label: '1st semester', value: '1sts' },
+        { label: '2nd semester', value: '2nds' }
+    ];
+    const subjectList = [
+        { label: 'Java', value: 'Java' },
+        { label: 'C++', value: 'Cpp' }
     ];
 
-    const [value, setValue] = React.useState(null);
+    const [department, setDepartment] = React.useState(null);
+    const [semester, setSemester] = React.useState(null);
+    const [subject, setSubject] = React.useState(null);
+
     const [isFocus, setIsFocus] = React.useState(false);
     const [date, setDate] = React.useState()
     const [overlay, setoverlay] = React.useState(false)
 
     function displayDate() {
         setoverlay(true)
+    }
+
+    async function gotoAttendanceList(params) {
+        if (department && semester && subject) {
+            const displayData = {department, semester, subject}
+            const req = await _POST(`apiv1/verify-attendance?q=${department}${semester}`, { sub: subject, date: "07/06/2024" })
+            if (req && req.result) {
+                navigation.navigate('showSheet', { displayData } )
+            } else {
+                Alert.alert('This attendance already exists 👌')
+            }
+        } else {
+            Alert.alert('Please! Select all the fields 👌')
+        }
     }
 
     return (
@@ -44,18 +64,18 @@ const CreateSheetScreen = ({navigation}) => {
                         selectedTextStyle={style.selectedTextStyle}
                         inputSearchStyle={style.inputSearchStyle}
                         iconStyle={style.iconStyle}
-                        data={data}
+                        data={departmentList}
                         search
                         maxHeight={300}
                         labelField="label"
                         valueField="value"
                         placeholder={!isFocus ? 'Select Department' : '...'}
                         searchPlaceholder="Search..."
-                        value={value}
+                        value={department}
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         onChange={item => {
-                            setValue(item.value);
+                            setDepartment(item.value);
                             setIsFocus(false);
                         }}
                         renderLeftIcon={() => (
@@ -68,18 +88,18 @@ const CreateSheetScreen = ({navigation}) => {
                         selectedTextStyle={style.selectedTextStyle}
                         inputSearchStyle={style.inputSearchStyle}
                         iconStyle={style.iconStyle}
-                        data={data}
+                        data={semesterList}
                         search
                         maxHeight={300}
                         labelField="label"
                         valueField="value"
                         placeholder={!isFocus ? 'Select Semester' : '...'}
                         searchPlaceholder="Search..."
-                        value={value}
+                        value={semester}
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         onChange={item => {
-                            setValue(item.value);
+                            setSemester(item.value);
                             setIsFocus(false);
                         }}
                         renderLeftIcon={() => (
@@ -93,18 +113,18 @@ const CreateSheetScreen = ({navigation}) => {
                         selectedTextStyle={style.selectedTextStyle}
                         inputSearchStyle={style.inputSearchStyle}
                         iconStyle={style.iconStyle}
-                        data={data}
+                        data={subjectList}
                         search
                         maxHeight={300}
                         labelField="label"
                         valueField="value"
                         placeholder={!isFocus ? 'Select Subject' : '...'}
                         searchPlaceholder="Search..."
-                        value={value}
+                        value={subject}
                         onFocus={() => setIsFocus(true)}
                         onBlur={() => setIsFocus(false)}
                         onChange={item => {
-                            setValue(item.value);
+                            setSubject(item.value);
                             setIsFocus(false);
                         }}
                         renderLeftIcon={() => (
@@ -112,7 +132,7 @@ const CreateSheetScreen = ({navigation}) => {
                         )}
                     />
 
-                    <TouchableOpacity style={{ ...style.dropdown, display: 'flex', flexDirection: 'row', alignItems: 'center', paddingVertical: 18 }} onPress={()=>displayDate()}>
+                    <TouchableOpacity style={{ ...style.dropdown, display: 'flex', flexDirection: 'row', alignItems: 'center', paddingVertical: 18 }} onPress={() => displayDate()}>
                         <Fontisto name="date" size={20} color="white" style={{ marginRight: 10 }} />
                         <Text style={{ fontSize: 16, color: 'white', fontWeight: 400 }}>Select Date</Text>
                     </TouchableOpacity>
@@ -130,28 +150,28 @@ const CreateSheetScreen = ({navigation}) => {
                         onChange={(params) => setDate(params.date)}
                     />
                 </View>
-                <TouchableOpacity onPress={()=> setoverlay(false)} style={{backgroundColor: 'transparent', width: '100%', height: 100}}></TouchableOpacity>
+                <TouchableOpacity onPress={() => setoverlay(false)} style={{ backgroundColor: 'transparent', width: '100%', height: 100 }}></TouchableOpacity>
             </View>
 
-            <View style={{position: 'absolute', bottom: 10,  width: '100%'}}>
+            <View style={{ position: 'absolute', bottom: 10, width: '100%' }}>
                 <SwipeButton
                     Icon={
                         <Feather name="arrow-right" size={30} color="white" />
                     }
                     circleBackgroundColor={`#008046`}
-                    onComplete={() => navigation.navigate('showSheet')}
+                    onComplete={gotoAttendanceList}
                     title="Swipe to create >>"
-                    containerStyle={{ backgroundColor: '#e6fff4', borderWidth: 1.5, borderColor: '#009954'}}
+                    containerStyle={{ backgroundColor: '#e6fff4', borderWidth: 1.5, borderColor: '#009954' }}
                     underlayTitle="Done"
                     underlayStyle={{
                         borderRadius: 0,
                         backgroundColor: '#004d2a',
                     }}
-                    goBackToStart = {true}
+                    goBackToStart={true}
                     height={60}
                     circleSize={65}
                     borderRadius={80}
-                    titleStyle={{color: '#009954', fontWeight: 600 }}
+                    titleStyle={{ color: '#009954', fontWeight: 600 }}
                     underlayTitleStyle={{ color: 'white', fontWeight: 'bold' }}
                 />
             </View>
