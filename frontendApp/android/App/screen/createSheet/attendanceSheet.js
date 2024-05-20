@@ -10,8 +10,6 @@ import StudentContext from '../../../contexts/studentContext';
 
 
 
-
-
 const AttendanceSheet = ({ route }) => {
   const { displayData } = route.params;
   const [students, setStudents] = useState([])
@@ -19,13 +17,11 @@ const AttendanceSheet = ({ route }) => {
 
   async function submitAttendance() {
     if (studentsToDatabase.length === students.length) {
-      const dataToSend = {subject: "Java", month: "march", date: '07/06/2024', attendance: studentsToDatabase}
-      const req = _POST('apiv1/set-attendance?q=bca_1sts', dataToSend)
+      const dataToSend = {subject: "Cpp", month: "march", lastattendancedate: '13/06/2024', attendance: studentsToDatabase}
+      const req = await _POST('apiv1/set-attendance?q=bca_1sts', dataToSend)
       if (req) {
-        Alert.alert("Submitted successfully")
-      } else {
-        Alert.alert("Oops! Something went wrong")
-      }
+        Alert.alert(req.msg)
+      } else { Alert.alert("Oops! Something went wrong") }
     } else {
       Alert.alert('Please! Select all the students 👌')
     }

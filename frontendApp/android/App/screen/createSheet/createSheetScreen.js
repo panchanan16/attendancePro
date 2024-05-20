@@ -40,7 +40,7 @@ const CreateSheetScreen = ({ navigation }) => {
     async function gotoAttendanceList(params) {
         if (department && semester && subject) {
             const displayData = {department, semester, subject}
-            const req = await _POST(`apiv1/verify-attendance?q=${department}${semester}`, { sub: subject, date: "07/06/2024" })
+            const req = await _POST(`apiv1/verify-attendance?q=${department}${semester}`, { sub: subject, date: "09/06/2024" })
             if (req && req.result) {
                 navigation.navigate('showSheet', { displayData } )
             } else {
