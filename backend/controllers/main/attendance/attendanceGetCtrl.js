@@ -20,37 +20,24 @@ const attendanceGetControl = {
         }
     },
 
-    getTodayAttendance: async function (req, res) {
-        const adminDepartment = ['bca_1sts', 'bba_1sts']
-        const date = "06/06/2024"
-        const attendent = "Panchanan Deka"
-        const promises = []
+    getTodayAttendancePerSubject: async function (req, res) {
+       const attendance = mongoose.model(req.query.q, attendanceSchema)
+       const response = await attendance.find({ 'attendance.sub' : req.query.sub}, { 'attendance.subject' : 1, 'attendance.todayabsent' : 1, 'attendance.todaypresent' : 1})
+       if(response.length > 0) {
+         return res.status(200).send(response)
+       }else {
+         return res.status(500).send({ msg: "data do not exist!" })
+       }
+    },
 
-        adminDepartment.forEach( async (collectionName)=> {
-            const perquery = new Promise(async (resolve, reject) => {
-                try {
-                    const attendance = mongoose.model(collectionName, attendanceSchema);
-                    const response = await attendance.find(
-                        { 'attendance.lastattendance': date },
-                        { lastatttendent: 1, 'attendance.todaypresent': 1, 'attendance.todayabsent': 1, rollno: 1, 'attendance.sub': 1 }
-                    )
-                    resolve(response)
-                } catch (error) {
-                    console.log(error);
-                    reject(error);
-                }
-            }
-        )
-            promises.push(perquery)
-        })
-  
-      Promise.all(promises).then((data)=>{
-        res.status(200).send(data)
-      }).catch((error)=>{
-        console.log(error);
-        res.status(500).send({msg : "Some Internal Server Error Has Occurred"})
-      })
-
+    getTodayAttendance : async function(req, res) {
+        const todayTotal = mongoose.model('todaytotal')
+        const response  = await todayTotal.find({ depName : { $in :  ['BCA']}}, { _id: 0, __v: 0 })
+        if (response.length > 0) {
+            res.status(200).send(response)
+        } else {
+            res.status(500).send({msg : "No data available"})
+        }
     },
 
     getOverallAttendance : async function (req, res) {

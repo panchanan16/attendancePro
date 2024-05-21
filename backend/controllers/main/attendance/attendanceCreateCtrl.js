@@ -1,5 +1,6 @@
 // const attendance = require('../../models/main/attendanceModel')
 const mongoose = require('mongoose');
+const todayTotal = require('../../../models/main/totalModel');
 
 const attendanceSchema = new mongoose.Schema({
     rollno: { type: String, required: true, unique: true },
@@ -100,10 +101,14 @@ const attendanceCreateControl = {
 
         });
 
-        Promise.all(respondVerify).then((data) => {
+        Promise.all(respondVerify).then(async (data) => {
             if (data.includes(0)) {
                return res.status(200).send({ msg: "Attendance already took 🙌" })
             }else {
+                const totalInsert = await todayTotal.updateOne(
+                    { subject : req.body.subject, depName: req.body.depName},
+                    { todayTotalPresent : req.body.todayTotalPresent, todayTotalAbsent : req.body.todayTotalAbsent}, { upsert: true }
+                )
                 return res.status(200).send({ msg: "Submitted successfully 👌"})
             }
         }).catch((error) => {

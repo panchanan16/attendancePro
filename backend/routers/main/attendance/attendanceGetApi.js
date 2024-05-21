@@ -5,5 +5,7 @@ const attendanceGetController = require('../../../controllers/main/attendance/at
 attendanceGetRouter.get('/get-Attendance', attendanceGetController.getAttendance)
 attendanceGetRouter.get('/getToday-Attendance', attendanceGetController.getTodayAttendance)
 attendanceGetRouter.get('/getOverall-Attendance', attendanceGetController.getOverallAttendance)
+attendanceGetRouter.get('/get-Attendance-Per-Subject', attendanceGetController.getTodayAttendancePerSubject)
+
 
 module.exports = attendanceGetRouter
