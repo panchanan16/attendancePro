@@ -1,20 +1,33 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { _GET } from '../../utils/apiReq';
 
 export default function DisplayAttendancedetails() {
+    const [status, setstatus] = React.useState([])
+
+    useEffect(()=> {
+        async function getStudentStatus() {
+         const req = await _GET('apiv1/get-Attendance-Per-Subject?sub=Java&q=bca_1st')
+         if (req) { return setstatus(req) }
+         return;
+        }
+        getStudentStatus()
+        
+     }, [])
+
   return (
     <View style={{marginTop: 15, height: '73%'}}>
        <ScrollView style={styles.container}>
                 {
-                    [1, 2, 3, 4, 400, 3, 3, 3, 3, 3, 3].map((el, key) => (
+                   status.length > 0 && status.map((el, key) => (
                     <View key={key} style={styles.student}>
                         <View style={styles.studentBox}> 
                            <MaterialCommunityIcons name="face-man" size={24} color="black" />
                            <Text>Panchanan deka</Text>
                         </View>
-                        <View style={{...styles.status, backgroundColor : `${el === 3 ? '#53c68c' : '#ff4d4d'}`}}>
-                            <View><Text style={{color: 'white', fontWeight: 'bold'}}>{el === 3 ? 'P' : 'A'}</Text></View>
+                        <View style={{...styles.status, backgroundColor : `${el.attendance[0].todaypresent === 1 ? '#53c68c' : '#ff4d4d'}`}}>
+                            <View><Text style={{color: 'white', fontWeight: 'bold'}}>{el.attendance[0].todaypresent === 1 ? 'P' : 'A'}</Text></View>
                         </View>
                     </View>
                     ))

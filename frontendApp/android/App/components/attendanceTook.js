@@ -1,29 +1,41 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, useWindowDimensions} from 'react-native'
-import React from 'react'
+import { useEffect, useState } from 'react'
+import { _GET } from '../../utils/apiReq';
 
-const AttendanceTook = ({navi}) => {
+const AttendanceTook = ({navi, todayData}) => {
     const { width, height } = useWindowDimensions();
+
+    const [attendanceData, setattendanceData] = useState([])
+
+    useEffect(() => {
+      async function getTodayAttendance() {
+          const req = await _GET('apiv1/getToday-Attendance')
+          if (req) { setattendanceData(req) }
+          return;
+      }
+      getTodayAttendance()
+  }, [])
 
     return (
         <View style={{ height: `${height > 800 ? '92%' : '91%'}`, paddingBottom: 10, marginTop: 15 }}>
             <ScrollView style={styles.container}>
                 {
-                    [1, 2, 3, 4, 400, 3, 3, 3, 3, 3, 3].map((el, key) => (
-                    <TouchableOpacity key={key} onPress={() => navi.navigate('Sheet')}>
+                    attendanceData.length > 0 && attendanceData.map((el, key) => (
+                    <TouchableOpacity key={key} onPress={()=> navi.navigate('Sheet', {subject: 'Java', depName: "BCA", tp: el.todayTotalPresent, ta: el.todayTotalAbsent})}>
                         <View style={styles.abox}>
                             <View>
                                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline'}}>
-                                  <Text style={styles.heading}>BCA {el} sem</Text>
+                                  <Text style={styles.heading}>{el.depName}</Text>
                                   <Text style={{...styles.subheading, color:'#8A8D8B'}}>Panchanan Deka</Text>
                                 </View>
-                                <Text style={styles.subheading}>Web development</Text>
+                                <Text style={styles.subheading}>{el.subject }</Text>
                             </View>
                             <View style={styles.pabox}>
                                 <View style={{backgroundColor: '#ccffe8',  borderWidth: 1, borderColor: '#00b362', ...styles.pbox}}>
-                                    <Text style={[styles.paboxText, {color: '#00b362'}]}>Present {el}</Text>
+                                    <Text style={[styles.paboxText, {color: '#00b362'}]}>Present {el.todayTotalPresent}</Text>
                                 </View>
                                 <View style={{backgroundColor: '#ffcccc', borderWidth: 1, borderColor: '#cc0000', ...styles.pbox}}>
-                                    <Text style={[styles.paboxText, {color: '#cc0000'}]}>Absent 20</Text>
+                                    <Text style={[styles.paboxText, {color: '#cc0000'}]}>Absent {el.todayTotalAbsent}</Text>
                                 </View>
                             </View>
                         </View>

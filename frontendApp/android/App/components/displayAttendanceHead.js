@@ -10,7 +10,7 @@ const DisplayAttendanceHead = ({data, displayItem}) => {
     return (
         <View style={[styles.abox, {height : height/6}]}>
             <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-                <Text style={styles.heading}>{displayItem && displayItem.department != undefined ? displayItem.department : "Dummy"} {displayItem && displayItem.semester != undefined ? displayItem.semester : "Dummy"} sem</Text>
+                <Text style={styles.heading}>{displayItem && displayItem.depName != undefined ? displayItem.depName : "Dummy"} {displayItem && displayItem.semester != undefined ? displayItem.semester : "Dummy"} sem</Text>
                 <View style={styles.headBox}>
                     <View style={styles.iconBox}>
                         <Entypo name="open-book" size={20} color="black" />

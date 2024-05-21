@@ -1,10 +1,10 @@
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native'
-import React from 'react'
 import AttendanceTook from '../../components/attendanceTook'
 import styles from './homeStyle'
 
 const HomeScreen = ({navigation}) => {
   const date = new Date().toLocaleDateString()
+ 
   return (
     <SafeAreaView style={{backgroundColor: '#f0f0f5', height: '100%', flex: 1}}>
         <View style={{...styles.container, ...styles.headBox}}>

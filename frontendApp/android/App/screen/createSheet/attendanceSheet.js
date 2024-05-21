@@ -16,8 +16,14 @@ const AttendanceSheet = ({ route }) => {
   const [studentsToDatabase, setStudentToDatabase] = useState([])
 
   async function submitAttendance() {
+    let todayTotalPresent = 0;
+    let todayTotalAbsent = 0;
+    studentsToDatabase.forEach((el)=> {
+       todayTotalPresent += el.p
+       todayTotalAbsent += el.a
+    })
     if (studentsToDatabase.length === students.length) {
-      const dataToSend = {subject: "Cpp", month: "march", lastattendancedate: '13/06/2024', attendance: studentsToDatabase}
+      const dataToSend = {subject: "Java", month: "march", todayTotalPresent, todayTotalAbsent, depName: 'BCA', lastattendancedate: '16/06/2024', attendance: studentsToDatabase}
       const req = await _POST('apiv1/set-attendance?q=bca_1sts', dataToSend)
       if (req) {
         Alert.alert(req.msg)

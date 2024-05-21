@@ -14,7 +14,7 @@ export async function _POST(url, reqBody) {
 }
 
 
-export async function _GET(url, reqBody) {
+export async function _GET(url) {
     const request = await fetch(`${HEAD_URL}/${url}`)
     const response = await request.json()
     if (request.status === 200 && response) {
