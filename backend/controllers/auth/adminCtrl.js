@@ -40,6 +40,19 @@ const adminControl = {
             res.status(401).send({ msg: "You are not Authenticated" })
         }
 
+    },
+
+    admininfo: async function(req, res) {
+        jwt.verify(req.body.token, process.env.JWT_TOKEN, async function(err, decode) {
+            if (err) {
+              res.status(401).send({ msg: null })
+            } else {
+              const admin = await adminModel.findOne({ _id: decode.id, email: decode.email, token: req.body.token }, { name: 1, email: 1, departments: 1 });
+              if (admin) { res.status(200).send({msg: admin}) } else {
+                res.status(401).send({ msg: null })
+              }
+            }
+        });
     }
 }
 

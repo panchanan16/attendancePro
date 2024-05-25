@@ -11,7 +11,6 @@ async function routeAuth(req, res, next) {
           res.status(401).send({ msg: 'You are not authorized to access this' })
         }
       }
-  
   });
   
 }

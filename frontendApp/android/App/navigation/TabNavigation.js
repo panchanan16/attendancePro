@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ProfileScreen from '../screen/profile/profileScreen';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import HomeScreenNav from './HomeScreenNav';
 import AttendanceCreateScreenNav from './createSheetNav';
 import DepartmentScreenNav from './departmentNav';
 import { SafeAreaView } from 'react-native';
+import ProfileScreenNav from './profileNav';
 
 function HomeTab() {
   const Tab = createBottomTabNavigator();
@@ -31,7 +31,7 @@ function HomeTab() {
             <Entypo name="book" size={size} color={color} />
           ),
         }} />
-        <Tab.Screen name="Profile" component={ProfileScreen} options={{
+        <Tab.Screen name="Profile" component={ProfileScreenNav} options={{
           tabBarLabel: 'My Profile',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="face-man-profile" size={size} color={color} />

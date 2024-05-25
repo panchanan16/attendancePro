@@ -1,18 +1,30 @@
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
 import { styles } from '../screen/login/loginStyle'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { _POST } from '../../utils/apiReq'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../../contexts/userContext';
 
 
 export default function LoginForm({ head, nav }) {
     const [email, setemail] = useState()
     const [password, setpassword] = useState()
+    const {setisLoggedIn} = useContext(AuthContext)
+
+    const storeData = async (value) => {
+        try {
+          await AsyncStorage.setItem('my-key', value);
+        } catch (err) {
+           console.log(err);
+        }
+      }
 
     async function loginUser() {
         if (email && password) {
             const req = await _POST('auth/apiv1/admin-login', { email, password })
             if (req.status && req.msg.token) {
-                nav.navigate('Main')
+                await storeData(req.msg.token)
+                setisLoggedIn(true)
             } else { Alert.alert('Oops! Wrong crendentials 👎') }
         } else {
             Alert.alert('Please! Enter your crendentials 👌')

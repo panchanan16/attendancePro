@@ -1,14 +1,17 @@
 import { View, Text, Image, TouchableOpacity, StatusBar, SafeAreaView } from 'react-native'
 import login from '../../../assets/login.png'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import loginend from '../../../assets/loginend.png'
 import LoginForm from '../../components/loginform'
 import { styles } from './loginStyle'
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
+import { AuthContext } from '../../../contexts/userContext'
 
 export default function LoginScreen({ navigation }) {
     const [loginType, setloginType] = useState(true)
+    const {username} = useContext(AuthContext)
+    console.log(username);
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }} >
             <StatusBar />
