@@ -9,7 +9,7 @@ const AttendanceTook = ({navi, todayData}) => {
 
     useEffect(() => {
       async function getTodayAttendance() {
-          const req = await _GET('apiv1/getToday-Attendance')
+          const req = await _GET('apiv1/getToday-Attendance?date=15/06/2024')
           if (req) { setattendanceData(req) }
           return;
       }

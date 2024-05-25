@@ -67,12 +67,12 @@ const attendanceCreateControl = {
 
             if (dateCheck && dateCheck.length > 0) {
                 
-                return res.status(500).send({ result: false });
+                return res.status(500).send({ result: false, msg : "Invalid selection" });
             } 
             return res.status(200).send({ result: true });
            
         } else {  
-            return res.status(500).send({ result: false });
+            return res.status(500).send({ result: false, msg : "Invalid selection" });
         }
 
     },
@@ -107,7 +107,7 @@ const attendanceCreateControl = {
             }else {
                 const totalInsert = await todayTotal.updateOne(
                     { subject : req.body.subject, depName: req.body.depName},
-                    { todayTotalPresent : req.body.todayTotalPresent, todayTotalAbsent : req.body.todayTotalAbsent}, { upsert: true }
+                    { date: req.body.lastattendancedate, todayTotalPresent : req.body.todayTotalPresent, todayTotalAbsent : req.body.todayTotalAbsent}, { upsert: true }
                 )
                 return res.status(200).send({ msg: "Submitted successfully 👌"})
             }

@@ -32,7 +32,7 @@ const attendanceGetControl = {
 
     getTodayAttendance : async function(req, res) {
         const todayTotal = mongoose.model('todaytotal')
-        const response  = await todayTotal.find({ depName : { $in :  ['BCA']}}, { _id: 0, __v: 0 })
+        const response  = await todayTotal.find({ depName : { $in :  ['BCA']}, date: req.query.date}, { _id: 0, __v: 0 })
         if (response.length > 0) {
             res.status(200).send(response)
         } else {

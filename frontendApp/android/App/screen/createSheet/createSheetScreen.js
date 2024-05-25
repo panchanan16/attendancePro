@@ -41,10 +41,10 @@ const CreateSheetScreen = ({ navigation }) => {
         if (department && semester && subject) {
             const displayData = {department, semester, subject}
             const req = await _POST(`apiv1/verify-attendance?q=bca_1sts`, { sub: 'Java', date: "1/06/2024" })
-            if (req && req.result) {
+            if (req && req.status && req.msg.result) {
                 navigation.navigate('showSheet', { displayData } )
             } else {
-                Alert.alert('This attendance already exists 👌')
+                Alert.alert(req?.msg.msg)
             }
         } else {
             Alert.alert('Please! Select all the fields 👌')

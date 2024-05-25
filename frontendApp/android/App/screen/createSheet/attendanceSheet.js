@@ -23,10 +23,10 @@ const AttendanceSheet = ({ route }) => {
        todayTotalAbsent += el.a
     })
     if (studentsToDatabase.length === students.length) {
-      const dataToSend = {subject: "Java", month: "march", todayTotalPresent, todayTotalAbsent, depName: 'BCA', lastattendancedate: '16/06/2024', attendance: studentsToDatabase}
+      const dataToSend = {subject: "Java", month: "march", todayTotalPresent, todayTotalAbsent, depName: 'BCA', lastattendancedate: '15/06/2024', attendance: studentsToDatabase}
       const req = await _POST('apiv1/set-attendance?q=bca_1sts', dataToSend)
-      if (req) {
-        Alert.alert(req.msg)
+      if (req.status) {
+        Alert.alert(req.msg.msg)
       } else { Alert.alert("Oops! Something went wrong") }
     } else {
       Alert.alert('Please! Select all the students 👌')

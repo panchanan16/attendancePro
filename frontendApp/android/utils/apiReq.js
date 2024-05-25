@@ -8,9 +8,9 @@ export async function _POST(url, reqBody) {
     })
     const response = await request.json()
     if (request.status === 200 && response) {
-        return response;
+        return {status: true, msg: response};
     }
-    return false;
+    return {status: false, msg: response};
 }
 
 

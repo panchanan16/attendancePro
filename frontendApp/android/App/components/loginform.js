@@ -11,7 +11,7 @@ export default function LoginForm({ head, nav }) {
     async function loginUser() {
         if (email && password) {
             const req = await _POST('auth/apiv1/admin-login', { email, password })
-            if (req && req.token) {
+            if (req.status && req.msg.token) {
                 nav.navigate('Main')
             } else { Alert.alert('Oops! Wrong crendentials 👎') }
         } else {
