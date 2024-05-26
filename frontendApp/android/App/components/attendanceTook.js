@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, useWindowDimensions} from 'react-native'
-import { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, useWindowDimensions, RefreshControl} from 'react-native'
+import { useCallback, useEffect, useState } from 'react'
 import { _GET } from '../../utils/apiReq';
 
 const AttendanceTook = ({navi, todayData}) => {
@@ -7,18 +7,29 @@ const AttendanceTook = ({navi, todayData}) => {
 
     const [attendanceData, setattendanceData] = useState([])
 
+    const [refreshing, setRefreshing] = useState(false);
+
+    async function getTodayAttendance() {
+        const req = await _GET('apiv1/getToday-Attendance?date=15/06/2024')
+        if (req) { setattendanceData(req) }
+        return;
+    }
+
+    const onRefresh = useCallback(() => {
+      setRefreshing(true);
+      setTimeout(async () => {
+        await getTodayAttendance();
+        setRefreshing(false);
+      }, 1500);
+    }, []);
+
     useEffect(() => {
-      async function getTodayAttendance() {
-          const req = await _GET('apiv1/getToday-Attendance?date=15/06/2024')
-          if (req) { setattendanceData(req) }
-          return;
-      }
       getTodayAttendance()
   }, [])
 
     return (
         <View style={{ height: `${height > 800 ? '92%' : '91%'}`, paddingBottom: 10, marginTop: 15 }}>
-            <ScrollView style={styles.container}>
+            <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 {
                     attendanceData.length > 0 && attendanceData.map((el, key) => (
                     <TouchableOpacity key={key} onPress={()=> navi.navigate('Sheet', {subject: 'Java', depName: "BCA", tp: el.todayTotalPresent, ta: el.todayTotalAbsent})}>

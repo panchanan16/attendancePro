@@ -11,11 +11,8 @@ const HomeScreen = ({ navigation }) => {
     useCallback(() => {
       const onBackPress = () => {
         Alert.alert('Alert', 'Are you sure to exit the app??', [
-          {
-            text: 'Cancel',
-            onPress: () => null
-          },
-          {text: 'OK', onPress: () => BackHandler.exitApp()},
+          { text: 'Cancel', onPress: () => null},
+          {text: 'OK', onPress: () => BackHandler.exitApp()}
         ]);
         return true
       };
