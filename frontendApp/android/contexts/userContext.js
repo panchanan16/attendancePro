@@ -4,11 +4,11 @@ import { _POST } from "../utils/apiReq";
 
 export const AuthContext = createContext()
 
-export function AuthProvider({children}) {
+export function AuthProvider({ children }) {
     const [isLoggedIn, setisLoggedIn] = useState(false)
     const [userInfo, setuserInfo] = useState(null)
 
-    useEffect(()=> {
+    useEffect(() => {
         const checkLogin = async () => {
             const token = await AsyncStorage.getItem('my-key')
             const req = await _POST('auth/apiv1/admin-info', { token })
@@ -23,12 +23,14 @@ export function AuthProvider({children}) {
             return;
         }
         checkLogin()
-    }, [])
+    }, [userInfo])
 
 
 
-    return <AuthContext.Provider value={{isLoggedIn, setisLoggedIn, userInfo, setuserInfo}}>
-        {children}
-    </AuthContext.Provider>
+    return (
+        <AuthContext.Provider value={{ isLoggedIn, setisLoggedIn, userInfo, setuserInfo }}>
+            {children}
+        </AuthContext.Provider>
+    )
 }
 

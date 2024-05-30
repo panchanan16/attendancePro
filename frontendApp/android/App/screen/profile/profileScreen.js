@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native'
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import profile from '../../../assets/profile.webp'
 import profileStyle from './profileStyle'
 import profilebg from '../../../assets/profilebg.png'
@@ -21,9 +21,15 @@ const ProfileScreen = ({navigation}) => {
         <View style={profileStyle.profileBox}>
           <Image source={profile} style={{ width: 100, height: 100 }} />
           <Text style={profileStyle.dname}>{userInfo?.name}</Text>
-          <Text style={profileStyle.sname}>BCA, BBA</Text>
+          <View style={profileStyle.dept}>
+          {
+            userInfo && userInfo.departments.map((dept, key)=> (
+              <Text key={key} style={profileStyle.sname}>{dept}</Text>
+            ))
+          }
+          </View>
         </View>
-      </View>
+      </View> 
 
       <View style={{alignItems: 'center', marginTop: 50}}>
         <TouchableOpacity style={profileStyle.btn} onPress={()=> navigation.navigate('updateProfile')}>

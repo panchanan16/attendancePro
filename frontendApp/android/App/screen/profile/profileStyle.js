@@ -15,6 +15,10 @@ const profileStyle = StyleSheet.create({
         width: "100%",
         gap: 18
     },
+    dept : {
+       flexDirection: 'row',
+       gap: 10
+    },
     logout : {
         width: "100%",
         position: "absolute",

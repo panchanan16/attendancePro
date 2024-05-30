@@ -46,11 +46,24 @@ const adminControl = {
               res.status(401).send({ msg: null })
             } else {
               const admin = await adminModel.findOne({ _id: decode.id, email: decode.email, token: req.body.token }, { name: 1, email: 1, departments: 1 });
-              if (admin) { res.status(200).send({msg: admin}) } else {
+              if (admin) {res.status(200).send({msg: admin}) } else {
                 res.status(401).send({ msg: null })
               }
             }
         });
+    },
+
+    updateAdminInfo : async function(req, res) {
+        console.log(req.body);
+        const { id, name, departments, gender} = req.body
+        const response = await adminModel.updateOne({ _id: id}, { name: name, departments: departments, gender: gender})
+        console.log(response);
+        if(response.modifiedCount > 0) {
+            return res.status(200).send({msg: "Updated Successfully 🙌"})
+        }
+
+        return res.status(500).send({msg: "Something went wrong!"})
+       
     }
 }
 
