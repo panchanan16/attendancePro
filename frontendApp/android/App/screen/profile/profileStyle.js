@@ -6,7 +6,6 @@ const profileStyle = StyleSheet.create({
         fontWeight: "bold",
         color: "#102B77",
     },
-
     profileBox : {
         display: "flex",
         flexDirection: "column",

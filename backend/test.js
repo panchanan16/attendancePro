@@ -1,14 +1,33 @@
-function processArray(arr, chunkSize) {
-    for (let i = 0; i < arr.length; i += chunkSize) {
-      const chunk = arr.slice(i, i + chunkSize); 
-      console.log(chunk);
-    }
-  }
+// function processArray(arr, chunkSize) {
+//     for (let i = 0; i < arr.length; i += chunkSize) {
+//       const chunk = arr.slice(i, i + chunkSize); 
+//       console.log(chunk);
+//     }
+//   }
   
-  const largeArray = [1, 2, 3, 4,5,5,1, 2, 3, 4,5,5,1, 2, 3, 4,5,8,1, 2, 3, 4,5,9,1, 2, 3, 4,5,5,1, 2, 3, 4,5,10]; // Large array
-  const chunkSize = 6; 
+//   const largeArray = [1, 2, 3, 4,5,5,1, 2, 3, 4,5,5,1, 2, 3, 4,5,8,1, 2, 3, 4,5,9,1, 2, 3, 4,5,5,1, 2, 3, 4,5,10]; // Large array
+//   const chunkSize = 6; 
 
-  processArray(largeArray, chunkSize);
+//   processArray(largeArray, chunkSize);
+
+
+  const arr = [
+    { count: { p: 12, a: 6 }, name: 'march' },
+    { count: { p: 0, a: 0 }, name: 'april' },
+    { count: { p: 0, a: 0 }, name: 'may' },
+    { count: { p: 0, a: 0 }, name: 'jun' },
+    { count: { p: 0, a: 0 }, name: 'july' },
+    { count: { p: 0, a: 0 }, name: 'aug' }
+  ]
+
+var p = 0
+arr.forEach((acc)=> {
+  p += acc.count.a
+  console.log(acc.count.a);
+})
+
+console.log('Total: ' + p);
+
 
   
 

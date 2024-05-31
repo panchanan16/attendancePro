@@ -21,38 +21,50 @@ const attendanceGetControl = {
     },
 
     getTodayAttendancePerSubject: async function (req, res) {
-       const attendance = mongoose.model(req.query.q, attendanceSchema)
-       const response = await attendance.find({ 'attendance.sub' : req.query.sub}, { 'attendance.subject' : 1, 'attendance.todayabsent' : 1, 'attendance.todaypresent' : 1})
-       if(response.length > 0) {
-         return res.status(200).send(response)
-       }else {
-         return res.status(500).send({ msg: "data do not exist!" })
-       }
+        const attendance = mongoose.model(req.query.q, attendanceSchema)
+        const response = await attendance.find({ 'attendance.sub': req.query.sub }, { 'attendance.subject': 1, 'attendance.todayabsent': 1, 'attendance.todaypresent': 1 })
+        if (response.length > 0) {
+            return res.status(200).send(response)
+        } else {
+            return res.status(500).send({ msg: "data do not exist!" })
+        }
     },
 
-    getTodayAttendance : async function(req, res) {
+    getTodayAttendance: async function (req, res) {
         const todayTotal = mongoose.model('todaytotal')
-        const response  = await todayTotal.find({ depName : { $in :  ['BCA']}, date: req.query.date}, { _id: 0, __v: 0 })
+        const response = await todayTotal.find({ depName: { $in: ['BCA'] }, date: req.query.date }, { _id: 0, __v: 0 })
         if (response.length > 0) {
             res.status(200).send(response)
         } else {
-            res.status(500).send({msg : "No data available"})
+            res.status(500).send({ msg: "No data available" })
         }
     },
 
-    getOverallAttendance : async function (req, res) {
+    getOverallAttendancePerSubject: async function (req, res) {
         try {
             const attendance = mongoose.model(req.query.q, attendanceSchema);
             const response = await attendance.find(
-            {},
-            {rollno: 1, 'attendance.sub': 1, 'attendance.month': 1}
+                { 'attendance.sub': req.query.sub },
+                { rollno: 1, 'attendance.sub': 1, 'attendance.month': 1 }
             )
-            res.status(200).send({response})
+            const sendData = [];
+            response.forEach((Student) => {
+                const monthData = Student.attendance[0].month;
+                let p = 0;
+                let a = 0;
+                monthData.forEach((month) => {
+                    p += month.count.p
+                    a += month.count.a
+                })
+                // console.log('Roll no: ' + Student.rollno + 'Present: ' + p + 'Absent: ' + a);
+                sendData.push({ rollno: Student.rollno, present: p, absent: a })
+            })
+            res.status(200).send({ sendData })
         } catch (error) {
             console.log(error);
-            res.status(500).send({msg : "Some error occcurd in fetching"})
+            res.status(500).send({ msg: "Some error occcurd in fetching" })
         }
-        
+
     }
 }
 

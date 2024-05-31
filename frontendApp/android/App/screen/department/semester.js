@@ -2,45 +2,23 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import React from 'react'
 import { FontAwesome6 } from '@expo/vector-icons';
 
-const Semester = ({ navigation }) => {
+const Semester = ({ navigation, route }) => {
+    const { name, session } = route.params;
+
     return (
         <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
             <View style={styles.container}>
-                <View style={{padding: 8, marginLeft: 10}}>
-                    <Text style={{fontSize: 25, fontWeight: 'bold', color: '#0073cc'}}>Semesters</Text>
+                <View style={{ padding: 8, marginLeft: 10 }}>
+                    <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#0073cc' }}>Current Semesters</Text>
                 </View>
-
-                <TouchableOpacity style={styles.semesterBox} onPress={() => navigation.navigate('subjects')}>
-                    <FontAwesome6 name="people-group" size={30} color="#0a4270" />
-                    <Text style={{ fontSize: 20, fontWeight: 600, color: '#0a4270' }}>1st Semester</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.semesterBox} onPress={() => navigation.navigate('subjects')}>
-                    <FontAwesome6 name="people-group" size={30} color="#0a4270" />
-                    <Text style={{ fontSize: 20, fontWeight: 600, color: '#0a4270' }}>1st Semester</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.semesterBox} onPress={() => navigation.navigate('subjects')}>
-                    <FontAwesome6 name="people-group" size={30} color="#0a4270" />
-                    <Text style={{ fontSize: 20, fontWeight: 600, color: '#0a4270' }}>1st Semester</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.semesterBox} onPress={() => navigation.navigate('subjects')}>
-                    <FontAwesome6 name="people-group" size={30} color="#0a4270" />
-                    <Text style={{ fontSize: 20, fontWeight: 600, color: '#0a4270' }}>1st Semester</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.semesterBox} onPress={() => navigation.navigate('subjects')}>
-                    <FontAwesome6 name="people-group" size={30} color="#0a4270" />
-                    <Text style={{ fontSize: 20, fontWeight: 600, color: '#0a4270' }}>1st Semester</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.semesterBox} onPress={() => navigation.navigate('subjects')}>
-                    <FontAwesome6 name="people-group" size={30} color="#0a4270" />
-                    <Text style={{ fontSize: 20, fontWeight: 600, color: '#0a4270' }}>1st Semester</Text>
-                </TouchableOpacity>
-
-
+                {
+                    session && session.map((sem, key) => (
+                        <TouchableOpacity key={key} style={styles.semesterBox} onPress={() => navigation.navigate('subjects')}>
+                            <FontAwesome6 name="people-group" size={30} color="#0a4270" />
+                            <Text style={{ fontSize: 20, fontWeight: 600, color: '#0a4270' }}>{sem} Semester</Text>
+                        </TouchableOpacity>
+                    ))
+                }
             </View>
         </SafeAreaView>
     )

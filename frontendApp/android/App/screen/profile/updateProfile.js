@@ -12,8 +12,7 @@ const UpdateProfile = () => {
   const [isMale, setMale] = useState(false)
   const {departToDb} = useContext(DepartmentContext);
 
-  async function profileUpdate() {
-    console.log(departToDb);
+  async function profileUpdate() { 
     const depts =  departToDb.length > 0 ? departToDb : userInfo.departments
     const gender = isMale ? 'FEMALE' : 'MALE'
     const req = await _POST('auth/apiv1/update-admin-info', {id: userInfo._id, name: username, departments: depts, gender})

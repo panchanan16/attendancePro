@@ -1,0 +1,31 @@
+{
+    "currentSession": [
+        {
+            "id": 3,
+            "department": "BCOM",
+            "session": [
+                "1st",
+                "3rd",
+                "5th"
+            ]
+        },
+        {
+            "id": 1,
+            "department": "BCA",
+            "session": [ 
+                "2nd",
+                "4th",
+                "6th"
+            ]
+        },
+        {
+            "id": 2,
+            "department": "BBA",
+            "session": [
+                "2nd",
+                "4th",
+                "6th"
+            ]
+        }
+    ]
+}

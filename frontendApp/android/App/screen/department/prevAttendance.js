@@ -1,12 +1,22 @@
-import { View, Text, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native'
 import { useWindowDimensions } from 'react-native';
 import { styles } from './prevStyle';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useEffect, useState } from 'react';
+import { _GET } from '../../../utils/apiReq';
 
 const PrevAttendance = () => {
     const { width, height } = useWindowDimensions();
+    const [attendancePerSub, setAttendancePerSub] = useState([])
+    useEffect(() => {
+        async function getStudentAttendance() {
+            const req = await _GET('apiv1/getOverall-Attendance-per-sub?sub=Java&q=bca_1st')
+            if (req) { return setAttendancePerSub(req.sendData) }
+        }
+        getStudentAttendance()
+    }, [])
     return (
         <SafeAreaView style={{ backgroundColor: '#f0f0f5', height: '100%', flex: 1 }}>
             <View style={[styles.abox, { height: height / 6 }]}>
@@ -19,7 +29,7 @@ const PrevAttendance = () => {
                         </View>
                         <View style={styles.iconBox}>
                             <FontAwesome5 name="book-reader" size={20} color="black" />
-                            <Text style={{ ...styles.subheading  }}>Total class - 200</Text>
+                            <Text style={{ ...styles.subheading }}>Total class - {attendancePerSub.length > 0 && attendancePerSub[0].present + attendancePerSub[0].absent}</Text>
                         </View>
                     </View>
                 </View>
@@ -28,22 +38,22 @@ const PrevAttendance = () => {
             <View style={{ height: '78%' }}>
                 <ScrollView style={styles.container}>
                     {
-                        [1, 2, 3, 4, 400, 3, 3, 3, 3, 3, 3].map((el, key) => (
+                        attendancePerSub.length > 0 ? attendancePerSub.map((el, key) => (
                             <View key={key} style={styles.student}>
                                 <View style={styles.studentBox}>
                                     <MaterialCommunityIcons name="face-man" size={24} color="black" />
-                                    <Text>Panchanan deka</Text>
+                                    <Text>{el.rollno}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', gap: 5 }}>
-                                    <View style={{ ...styles.status, backgroundColor: '#ff4d4d' }}>
-                                        <View><Text style={{ color: 'white', fontWeight: 'bold' }}>100</Text></View>
-                                    </View>
                                     <View style={{ ...styles.status, backgroundColor: '#53c68c' }}>
-                                        <View><Text style={{ color: 'white', fontWeight: 'bold' }}>12</Text></View>
+                                        <View><Text style={{ color: 'white', fontWeight: 'bold' }}>{el.present}</Text></View>
+                                    </View>
+                                    <View style={{ ...styles.status, backgroundColor: '#ff4d4d' }}>
+                                        <View><Text style={{ color: 'white', fontWeight: 'bold' }}>{el.absent}</Text></View>
                                     </View>
                                 </View>
                             </View>
-                        ))
+                        )) : <ActivityIndicator size="large" color="#0000ff" />
                     }
                 </ScrollView>
             </View>
