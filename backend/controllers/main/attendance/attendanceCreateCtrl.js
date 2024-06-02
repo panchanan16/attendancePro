@@ -1,6 +1,7 @@
 // const attendance = require('../../models/main/attendanceModel')
 const mongoose = require('mongoose');
 const todayTotal = require('../../../models/main/totalModel');
+const attendanceModel = require('../../../models/main/attendanceModel')
 
 const attendanceSchema = new mongoose.Schema({
     rollno: { type: String, required: true, unique: true },
@@ -75,43 +76,13 @@ const attendanceCreateControl = {
 
     },
 
-    setAttendance: async function (req, res) {
-        const attendance = mongoose.model(req.query.q, attendanceSchema);
-        const respondVerify = []
-        req.body.attendance.forEach(async (element) => {
-            const perInsert = new Promise(async (resolve, reject) => {
-                try {
-                    const response = await attendance.updateOne(
-                        { rollno: element.rollno },
-                        {
-                            $inc: { 'attendance.$[element].month.$[item].count.p': element.p, 'attendance.$[element].month.$[item].count.a': element.a },
-                            $set: { 'attendance.$[element].lastattendance': req.body.lastattendancedate, 'attendance.$[element].lastatttendent': req.body.lastatttendent, 'attendance.$[element].todaypresent': element.p, 'attendance.$[element].todayabsent': element.a }
-                        },
-                        { arrayFilters: [{ 'element.sub': req.body.subject, 'element.lastattendance': { $ne: req.body.lastattendancedate } }, { 'item.name': req.body.month }] }
-                    )
-                    resolve(response.modifiedCount)
-                } catch (error) {
-                    reject(error);
-                }
-            })
-
-            respondVerify.push(perInsert)
-
-        });
-
-        Promise.all(respondVerify).then(async (data) => {
-            if (data.includes(0)) {
-                return res.status(200).send({ msg: "Attendance already took 🙌" })
-            } else {
-                const totalInsert = await todayTotal.updateOne(
-                    { subject: req.body.subject, depName: req.body.depName },
-                    { date: req.body.lastattendancedate, todayTotalPresent: req.body.todayTotalPresent, todayTotalAbsent: req.body.todayTotalAbsent }, { upsert: true }
-                )
-                return res.status(200).send({ msg: "Submitted successfully 👌" })
-            }
-        }).catch((error) => {
-            res.status(500).send({ msg: "Server Error Has Occurred" })
-        })
+    setAttendance : async function(req, res) {
+        const query = await attendanceModel.updateOne(
+            {rollno: "ihhrhh4uvh"},
+            { attendance: {subject: "java", present: ['12/23', '23/24']}},
+            {upsert: true}
+        )
+        return res.status(200).send(query)
     }
 }
 
