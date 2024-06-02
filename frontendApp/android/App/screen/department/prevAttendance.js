@@ -7,16 +7,17 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { _GET } from '../../../utils/apiReq';
 
-const PrevAttendance = () => {
+const PrevAttendance = ({route}) => {
+    const { department, sem, subject } = route.params;
     const { width, height } = useWindowDimensions();
     const [attendancePerSub, setAttendancePerSub] = useState([])
     useEffect(() => {
         async function getStudentAttendance() {
-            const req = await _GET('apiv1/getOverall-Attendance-per-sub?sub=Java&q=bca_1st')
+            const req = await _GET(`apiv1/getOverall-Attendance-per-sub?sub=${subject}&q=${department.toLowerCase()}_1st`)
             if (req) { return setAttendancePerSub(req.sendData) }
         }
         getStudentAttendance()
-    }, [])
+    }, [subject])
     return (
         <SafeAreaView style={{ backgroundColor: '#f0f0f5', height: '100%', flex: 1 }}>
             <View style={[styles.abox, { height: height / 6 }]}>

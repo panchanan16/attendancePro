@@ -51,7 +51,6 @@ const attendanceCreateControl = {
                 { 'attendance.sub': req.body.subject },
                 { $addToSet: { 'attendance.$[].month': { name: month, count: { p: 0, a: 0 } } } },
             )
-            console.log(response);
         })
         res.status(200).send({ msg: "month added successfully" })
     },
@@ -63,16 +62,15 @@ const attendanceCreateControl = {
 
         if (subcheck && subcheck.length > 0) {
 
-            const dateCheck = await attendance.find({'attendance.lastattendance': date }, { rollno: 1 })
+            const dateCheck = await attendance.find({ 'attendance.lastattendance': date }, { rollno: 1 })
 
             if (dateCheck && dateCheck.length > 0) {
-                
-                return res.status(500).send({ result: false, msg : "Invalid selection" });
-            } 
+                return res.status(500).send({ result: false, msg: "Invalid selection" });
+            }
             return res.status(200).send({ result: true });
-           
-        } else {  
-            return res.status(500).send({ result: false, msg : "Invalid selection" });
+
+        } else {
+            return res.status(500).send({ result: false, msg: "Invalid selection" });
         }
 
     },
@@ -103,13 +101,13 @@ const attendanceCreateControl = {
 
         Promise.all(respondVerify).then(async (data) => {
             if (data.includes(0)) {
-               return res.status(200).send({ msg: "Attendance already took 🙌" })
-            }else {
+                return res.status(200).send({ msg: "Attendance already took 🙌" })
+            } else {
                 const totalInsert = await todayTotal.updateOne(
-                    { subject : req.body.subject, depName: req.body.depName},
-                    { date: req.body.lastattendancedate, todayTotalPresent : req.body.todayTotalPresent, todayTotalAbsent : req.body.todayTotalAbsent}, { upsert: true }
+                    { subject: req.body.subject, depName: req.body.depName },
+                    { date: req.body.lastattendancedate, todayTotalPresent: req.body.todayTotalPresent, todayTotalAbsent: req.body.todayTotalAbsent }, { upsert: true }
                 )
-                return res.status(200).send({ msg: "Submitted successfully 👌"})
+                return res.status(200).send({ msg: "Submitted successfully 👌" })
             }
         }).catch((error) => {
             res.status(500).send({ msg: "Server Error Has Occurred" })

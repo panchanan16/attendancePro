@@ -6,7 +6,6 @@ const DepartmentToSem = ({nav, depname}) => {
     async function goToSemester() {
         const sem = await _GET(`apiv1/get-session-by-name?name=${depname && depname}`)
         if (sem) {
-            console.log(sem);
             nav.navigate('semester', {name: sem.data.department, session: sem.data.session}) 
         }
        

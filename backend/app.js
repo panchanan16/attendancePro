@@ -19,6 +19,7 @@ const attendanceRoutesC = require('./routers/main/attendance/attendanceCreateApi
 const attendanceRoutesG = require('./routers/main/attendance/attendanceGetApi')
 const adminRoutes = require('./routers/auth/adminApi')
 const sessionRoutes = require('./routers/main/sessionApi')
+const subjRoutes = require('./routers/main/subjApi')
 
 
 //Routes--
@@ -27,6 +28,7 @@ app.use('/apiv1', departmentRoutes);
 app.use('/apiv1', attendanceRoutesC);
 app.use('/apiv1', attendanceRoutesG);
 app.use('/apiv1', sessionRoutes);
+app.use('/apiv1', subjRoutes);
 app.use('/auth/apiv1', adminRoutes);
 
 

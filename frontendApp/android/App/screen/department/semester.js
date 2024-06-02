@@ -5,6 +5,10 @@ import { FontAwesome6 } from '@expo/vector-icons';
 const Semester = ({ navigation, route }) => {
     const { name, session } = route.params;
 
+    async function goToSubject(semester) {
+        navigation.navigate('subjects', {department: name, sem: semester})
+    }
+
     return (
         <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
             <View style={styles.container}>
@@ -13,7 +17,7 @@ const Semester = ({ navigation, route }) => {
                 </View>
                 {
                     session && session.map((sem, key) => (
-                        <TouchableOpacity key={key} style={styles.semesterBox} onPress={() => navigation.navigate('subjects')}>
+                        <TouchableOpacity key={key} style={styles.semesterBox} onPress={() => goToSubject(sem)}>
                             <FontAwesome6 name="people-group" size={30} color="#0a4270" />
                             <Text style={{ fontSize: 20, fontWeight: 600, color: '#0a4270' }}>{sem} Semester</Text>
                         </TouchableOpacity>

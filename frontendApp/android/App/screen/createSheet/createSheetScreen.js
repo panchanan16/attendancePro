@@ -10,6 +10,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { styles, style } from './createSheetStyle';
 import { _POST } from '../../../utils/apiReq';
+import dayjs from 'dayjs';
 
 const CreateSheetScreen = ({ navigation }) => {
     const departmentList = [
@@ -32,6 +33,7 @@ const CreateSheetScreen = ({ navigation }) => {
     const [isFocus, setIsFocus] = React.useState(false);
     const [date, setDate] = React.useState()
     const [overlay, setoverlay] = React.useState(false)
+    const todayDate = dayjs().format('DD-MM-YYYY')
 
     function displayDate() {
         setoverlay(true)
@@ -134,7 +136,7 @@ const CreateSheetScreen = ({ navigation }) => {
 
                     <TouchableOpacity style={{ ...style.dropdown, display: 'flex', flexDirection: 'row', alignItems: 'center', paddingVertical: 18 }} onPress={() => displayDate()}>
                         <Fontisto name="date" size={20} color="white" style={{ marginRight: 10 }} />
-                        <Text style={{ fontSize: 16, color: 'white', fontWeight: 400 }}>Select Date</Text>
+                        <Text style={{ fontSize: 16, color: 'white', fontWeight: 400 }}>{todayDate}</Text>
                     </TouchableOpacity>
 
 

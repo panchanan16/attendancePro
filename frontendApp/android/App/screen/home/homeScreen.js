@@ -3,9 +3,10 @@ import AttendanceTook from '../../components/attendanceTook'
 import styles from './homeStyle'
 import { useCallback, useEffect } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
+import dayjs from 'dayjs'
 
 const HomeScreen = ({ navigation }) => {
-  const date = new Date().toLocaleDateString()
+  const today = dayjs().format('DD-MM-YYYY')
 
   useFocusEffect(
     useCallback(() => {
@@ -18,7 +19,6 @@ const HomeScreen = ({ navigation }) => {
       };
 
       const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
       return () => subscription.remove();
     }, [])
   );
@@ -27,7 +27,7 @@ const HomeScreen = ({ navigation }) => {
     <SafeAreaView style={{ backgroundColor: '#f0f0f5', height: '100%', flex: 1 }}>
       <View style={{ ...styles.container, ...styles.headBox }}>
         <Text style={styles.headText}>Today Attendance</Text>
-        <Text style={{ fontWeight: 600, color: '#3399ff' }}>{date}</Text>
+        <Text style={{ fontWeight: 600, color: '#3399ff' }}>{today}</Text>
       </View>
       <View>
         <AttendanceTook navi={navigation} />
