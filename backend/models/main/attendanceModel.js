@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const attendanceSchema = new mongoose.Schema({
     rollno: { type: String, required: true, unique: true },
-    attendance : {type: [{ _id: false, subject: String, present: { type: [{type: String, unique: true}] }}]}
+    attendance : {type: [{ _id: false, subject: String, present: { type: [{type: String}] }}]}
 })
 
 

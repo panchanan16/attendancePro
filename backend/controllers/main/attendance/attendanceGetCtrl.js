@@ -1,6 +1,7 @@
 // const attendance = require('../../models/main/attendanceModel')
 const mongoose = require('mongoose');
 const fs = require('fs')
+const attendanceModel = require('../../../models/main/attendanceModel')    
 
 const attendanceSchema = new mongoose.Schema({
     rollno: { type: String, required: true, unique: true },
@@ -65,6 +66,16 @@ const attendanceGetControl = {
             res.status(500).send({ msg: "Some error occcurd in fetching" })
         }
 
+    },
+
+    getAttendancePerMonth : async function (req, res) {
+        const start = new Date("2024-06-01");
+        const end = new Date("2024-07-01"); 
+        const attendance = await attendanceModel.find(
+            {attendance : { elemMatch: { present : { $eq : '21-06-2024'}}}}
+            // {'attendance.subject' : 'java'}
+        )
+        res.status(200).send(attendance)
     }
 }
 

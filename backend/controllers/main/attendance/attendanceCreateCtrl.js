@@ -45,17 +45,6 @@ const attendanceCreateControl = {
         res.status(200).send({ msg: "subject added successfully" })
     },
 
-    addMonth: async function (req, res) {
-        const attendance = mongoose.model(req.query.q, attendanceSchema);
-        req.body.month && req.body.month.forEach(async (month) => {
-            const response = await attendance.updateMany(
-                { 'attendance.sub': req.body.subject },
-                { $addToSet: { 'attendance.$[].month': { name: month, count: { p: 0, a: 0 } } } },
-            )
-        })
-        res.status(200).send({ msg: "month added successfully" })
-    },
-
     getAttendanceVerify: async function (req, res) {
         const { sub, date } = req.body
         const attendance = mongoose.model(req.query.q, attendanceSchema);
@@ -76,13 +65,62 @@ const attendanceCreateControl = {
 
     },
 
-    setAttendance : async function(req, res) {
-        const query = await attendanceModel.updateOne(
-            {rollno: "ihhrhh4uvh"},
-            { attendance: {subject: "java", present: ['12/23', '23/24']}},
-            {upsert: true}
+    setAttendance: async function (req, res) {
+        const studentStatus= req.body.students
+        const bulkIns = studentStatus.map(student => ({
+            updateOne: {
+                filter: { rollno: student.rollno },
+                update: { $push: { 'attendance.$[elem].present' : new Date(student.status).toISOString() } },
+                upsert: true,
+                arrayFilters: [{ 'elem.subject': req.body.subject }]
+            }
+        }));
+
+        try {
+            const result = await attendanceModel.bulkWrite(bulkIns);
+            return res.status(200).send(result)
+        } catch (err) {
+            console.error(err);
+        }
+
+    },
+
+    addMonth: async function (req, res) {
+        const attendance = mongoose.model(req.query.q, attendanceSchema);
+        req.body.month && req.body.month.forEach(async (month) => {
+            const response = await attendance.updateMany(
+                { 'attendance.sub': req.body.subject },
+                { $addToSet: { 'attendance.$[].month': { name: month, count: { p: 0, a: 0 } } } },
+            )
+        })
+        res.status(200).send({ msg: "month added successfully" })
+    },
+
+    addSubject: async function (req, res) {
+        const response = await attendanceModel.updateMany(
+            {},
+            { $addToSet: { attendance: { subject: req.body.subject, present: [] } } },
         )
-        return res.status(200).send(query)
+        res.status(200).send({ msg: "subject added successfully" })
+    },
+
+    addStudentToSheet: async function (req, res) {
+        const students = req.body.students
+        const bulkIns = students.map(student => ({
+            updateOne: {
+                filter: { rollno: student },
+                update: { $push: { attendance: [{subject: 'java', present: []}, {subject: 'cpp', present: []}] } },
+                upsert: true
+            }
+        }));
+
+        try {
+            const result = await attendanceModel.bulkWrite(bulkIns);
+            return res.status(200).send(result)
+        } catch (err) {
+            console.error(err);
+        }
+
     }
 }
 
