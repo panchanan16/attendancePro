@@ -3,38 +3,12 @@ const mongoose = require('mongoose');
 const todayTotal = require('../../../models/main/totalModel');
 
 const attendanceSchema = new mongoose.Schema({
-    rollno: { type: String, required: true, unique: true },
-    attendance: { type: [{ _id: false, sub: String, todaypresent: Number, todayabsent: Number, todaytotalrecord: Number, lastattendance: String, lastatttendent: String, month: { type: [{ _id: false, name: String, count: { p: Number, a: Number } }] } }] }
+    rollId: { type: mongoose.Schema.Types.ObjectId, ref: 'students', required: true, unique: true },
+    attendance: { type: [{ _id: false, sub: String, todaypresent: Number, todayabsent: Number, todaytotalrecord: Number, lastattendance: String, lastatttendent: String, month: { type: [{ _id: false, name: String, count: { p: Number, a: Number }, presentDate: { type: [String] } }] } }] }
 })
 
 const attendanceCreateControl = {
-    createAttendanceSheet: async function (req, res) {
-        if (req.body.students && req.body.students.length) {
-            const createSemModel = mongoose.model(req.query.q, attendanceSchema);
-            const studentStatus = req.body.students
-            const response = await createSemModel.insertMany(studentStatus)
-            res.status(200).send(response);
-        }
-    },
-
-
-    createAttendance: async function (req, res) {
-        const createStudentAttendance = new attendance({
-            rollno: "eigeygigg11111rrer",
-            attendance: [{ sub: "math", lastattendance: "", month: [{ name: "jan", count: { p: 0, a: 1 } }] }]
-        })
-        try {
-            await createStudentAttendance.save({ timestamps: true })
-            res.status(200).send({ msg: `status added successfully 👌` })
-        } catch (error) {
-            console.log(error)
-            res.status(500).send({ msg: `Something error occurred while saving` })
-        }
-
-    },
-
     addSubject: async function (req, res) {
-        // const attendance = mongoose.connection.collection('bca_2nds');
         const attendance = mongoose.model(req.query.q, attendanceSchema);
         const response = await attendance.updateMany(
             {},
@@ -46,72 +20,81 @@ const attendanceCreateControl = {
 
     addMonth: async function (req, res) {
         const attendance = mongoose.model(req.query.q, attendanceSchema);
-        req.body.month && req.body.month.forEach(async (month) => {
-            const response = await attendance.updateMany(
-                { 'attendance.sub': req.body.subject },
-                { $addToSet: { 'attendance.$[].month': { name: month, count: { p: 0, a: 0 } } } },
-            )
-        })
-        res.status(200).send({ msg: "month added successfully" })
+        const monthToadd = req.body.month && req.body.month.map((month) => (
+            { name: month, count: { p: 0, a: 0 }, presentDate: [] }
+        ))
+
+        const response = await attendance.updateMany(
+            { 'attendance.sub': req.body.subject },
+            { $addToSet: { 'attendance.$[].month': monthToadd } },
+        )
+        res.status(200).send(response)
     },
 
     getAttendanceVerify: async function (req, res) {
         const { sub, date } = req.body
         const attendance = mongoose.model(req.query.q, attendanceSchema);
-        const subcheck = await attendance.find({ 'attendance.sub': sub }, { rollno: 1 })
+        const subcheck = await attendance.find({ 'attendance.sub': sub }, { rollno: 1 }).limit(50)
 
         if (subcheck && subcheck.length > 0) {
 
-            const dateCheck = await attendance.find({ 'attendance.lastattendance': date }, { rollno: 1 })
+            const dateCheck = await attendance.find({'attendance.sub': sub, 'attendance.lastattendance': date }, { rollno: 1 })
 
             if (dateCheck && dateCheck.length > 0) {
-                return res.status(500).send({ result: false, msg: "Invalid selection" });
+                return res.status(500).send({ result: false, msg: "Invalid selection ❌" });
             }
             return res.status(200).send({ result: true });
 
         } else {
-            return res.status(500).send({ result: false, msg: "Invalid selection" });
+            return res.status(500).send({ result: false, msg: "Invalid selection ❌" });
         }
 
     },
 
     setAttendance: async function (req, res) {
         const attendance = mongoose.model(req.query.q, attendanceSchema);
-        const respondVerify = []
-        req.body.attendance.forEach(async (element) => {
-            const perInsert = new Promise(async (resolve, reject) => {
-                try {
-                    const response = await attendance.updateOne(
-                        { rollno: element.rollno },
-                        {
-                            $inc: { 'attendance.$[element].month.$[item].count.p': element.p, 'attendance.$[element].month.$[item].count.a': element.a },
-                            $set: { 'attendance.$[element].lastattendance': req.body.lastattendancedate, 'attendance.$[element].lastatttendent': req.body.lastatttendent, 'attendance.$[element].todaypresent': element.p, 'attendance.$[element].todayabsent': element.a }
-                        },
-                        { arrayFilters: [{ 'element.sub': req.body.subject, 'element.lastattendance': { $ne: req.body.lastattendancedate } }, { 'item.name': req.body.month }] }
-                    )
-                    resolve(response.modifiedCount)
-                } catch (error) {
-                    reject(error);
-                }
-            })
 
-            respondVerify.push(perInsert)
+        const bulkIns = req.body.attendance.map((attend) => ({
+            updateOne: {
+                filter: { rollId: attend.rollno },
+                update: {
+                    $inc: { 'attendance.$[element].month.$[item].count.p': attend.p, 'attendance.$[element].month.$[item].count.a': attend.a },
+                    $set: { 'attendance.$[element].lastattendance': req.body.lastattendancedate, 'attendance.$[element].lastatttendent': req.body.lastatttendent, 'attendance.$[element].todaypresent': attend.p, 'attendance.$[element].todayabsent': attend.a },
+                    $addToSet: { 'attendance.$[element].month.$[item].presentDate': attend.p && req.body.lastattendancedate }
+                },
+                arrayFilters: [{ 'element.sub': req.body.subject, 'element.lastattendance': { $ne: req.body.lastattendancedate } }, { 'item.name': req.body.month }]
+            }
+        }))
 
-        });
-
-        Promise.all(respondVerify).then(async (data) => {
-            if (data.includes(0)) {
-                return res.status(200).send({ msg: "Attendance already took 🙌" })
-            } else {
+        try {
+            const result = await attendance.bulkWrite(bulkIns);
+            if (result.modifiedCount > 0) {
                 const totalInsert = await todayTotal.updateOne(
                     { subject: req.body.subject, depName: req.body.depName },
                     { date: req.body.lastattendancedate, todayTotalPresent: req.body.todayTotalPresent, todayTotalAbsent: req.body.todayTotalAbsent }, { upsert: true }
                 )
-                return res.status(200).send({ msg: "Submitted successfully 👌" })
+                return res.status(200).send({ msg: "Attendance updated successfully" })
             }
-        }).catch((error) => {
-            res.status(500).send({ msg: "Server Error Has Occurred" })
+            return res.status(500).send({ msg: "Something went wrong!" })
+        } catch (err) {
+            console.error(err);
+        }
+
+    },
+
+    addStudentSheet: async function (req, res) {
+        const attendance = mongoose.model(req.query.q, attendanceSchema);
+        const monthsArray = req.body.months.map((mon) => {
+            return { name: mon, count: { p: 0, a: 0 }, presentDate: [] }
         })
+        const subjects = req.body.subjects.map((sub) => {
+            return { sub: sub, lastattendance: "", lastatttendent: "", month: monthsArray }
+        })
+        const studentsArray = req.body.students.map((stud) => {
+            return { rollId: stud, attendance: subjects }
+        })
+        const response = await attendance.insertMany(studentsArray)
+        res.status(200).send(response);
     }
 }
 

@@ -7,6 +7,7 @@ import StudentListForAttendance from '../../components/studentListForAttendance'
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { _GET, _POST } from '../../../utils/apiReq';
 import StudentContext from '../../../contexts/studentContext';
+import dayjs from 'dayjs';
 
 
 
@@ -14,17 +15,22 @@ const AttendanceSheet = ({ route }) => {
   const { displayData } = route.params;
   const [students, setStudents] = useState([])
   const [studentsToDatabase, setStudentToDatabase] = useState([])
+  const todayDate = dayjs().format('DD-MM-YYYY')
 
   async function submitAttendance() {
     let todayTotalPresent = 0;
     let todayTotalAbsent = 0;
+
     studentsToDatabase.forEach((el)=> {
        todayTotalPresent += el.p
        todayTotalAbsent += el.a
     })
+    console.log(studentsToDatabase, students.length)
     if (studentsToDatabase.length === students.length) {
-      const dataToSend = {subject: "Java", month: "march", todayTotalPresent, todayTotalAbsent, depName: 'BCA', lastattendancedate: '15/06/2024', attendance: studentsToDatabase}
-      const req = await _POST('apiv1/set-attendance?q=bca_1sts', dataToSend)
+      const dataToSend = {subject: displayData.subject, month: "jan", todayTotalPresent, todayTotalAbsent, depName: displayData.depName, lastattendancedate: todayDate, attendance: studentsToDatabase}
+
+      const req = await _POST(`apiv1/set-attendance?q=${displayData.depName}_${displayData.semester}s`, dataToSend)
+
       if (req.status) {
         Alert.alert(req.msg.msg)
       } else { Alert.alert("Oops! Something went wrong") }

@@ -1,16 +1,18 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, useWindowDimensions, RefreshControl} from 'react-native'
 import { useCallback, useEffect, useState } from 'react'
 import { _GET } from '../../utils/apiReq';
+import dayjs from 'dayjs';
 
 const AttendanceTook = ({navi, todayData}) => {
     const { width, height } = useWindowDimensions();
+    const todayDate = dayjs().format('DD-MM-YYYY')
 
     const [attendanceData, setattendanceData] = useState([])
 
     const [refreshing, setRefreshing] = useState(false);
 
     async function getTodayAttendance() {
-        const req = await _GET('apiv1/getToday-Attendance?date=15/06/2024')
+        const req = await _GET(`apiv1/getToday-Attendance?date=${todayDate}`)
         if (req) { setattendanceData(req) }
         return;
     }
@@ -32,7 +34,7 @@ const AttendanceTook = ({navi, todayData}) => {
             <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 {
                     attendanceData.length > 0 && attendanceData.map((el, key) => (
-                    <TouchableOpacity key={key} onPress={()=> navi.navigate('Sheet', {subject: 'Java', depName: "BCA", tp: el.todayTotalPresent, ta: el.todayTotalAbsent})}>
+                    <TouchableOpacity key={key} onPress={()=> navi.navigate('Sheet', {subject: el.subject, depName: el.depName, tp: el.todayTotalPresent, ta: el.todayTotalAbsent})}>
                         <View style={styles.abox}>
                             <View>
                                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline'}}>

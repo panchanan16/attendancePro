@@ -10,6 +10,7 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         const checkLogin = async () => {
+            console.log("I am auth fun");
             const token = await AsyncStorage.getItem('my-key')
             const req = await _POST('auth/apiv1/admin-info', { token })
             if (req.status) {
@@ -23,7 +24,7 @@ export function AuthProvider({ children }) {
             return;
         }
         checkLogin()
-    }, [userInfo])
+    }, [])
 
 
 

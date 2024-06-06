@@ -20,15 +20,15 @@ const StudentStatus = ({ details }) => {
         return;
     }
 
-    function presentRecord(params) {
+    function presentRecord() {
         setstatus(1)
-        const eachStudent = { rollno : details && details.rollno, p: 1, a: 0}
+        const eachStudent = { rollno : details && details._id, p: 1, a: 0}
         insertRecord(eachStudent)   
     }
 
-    function absentRecord(params) {
+    function absentRecord() {
         setstatus(0)
-        const eachStudent = { rollno : details && details.rollno, p: 0, a: 1}
+        const eachStudent = { rollno : details && details._id, p: 0, a: 1}
         insertRecord(eachStudent) 
     }
 
@@ -51,7 +51,7 @@ const StudentStatus = ({ details }) => {
                 <MaterialCommunityIcons name="face-man" size={30} color="black" />
                 <View>
                     <Text style={{fontWeight: 500}}>{details && details.name}</Text>
-                    <Text style={{fontSize: 12}}>{details && details.rollno}</Text>
+                    <Text style={{fontSize: 12}}>{details && details._id}</Text>
                 </View>
             </View>
         </Pressable>

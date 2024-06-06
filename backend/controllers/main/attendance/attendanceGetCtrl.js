@@ -22,7 +22,9 @@ const attendanceGetControl = {
 
     getTodayAttendancePerSubject: async function (req, res) {
         const attendance = mongoose.model(req.query.q, attendanceSchema)
-        const response = await attendance.find({ 'attendance.sub': req.query.sub }, { 'attendance.subject': 1, 'attendance.todayabsent': 1, 'attendance.todaypresent': 1 })
+        const response = await attendance.find(
+            { attendance: { $elemMatch: { sub: req.query.sub } }, 'attendance.lastattendance': req.query.date },
+            {rollId: 1, 'attendance.sub': 1, 'attendance.todayabsent': 1, 'attendance.todaypresent': 1})
         if (response.length > 0) {
             return res.status(200).send(response)
         } else {
@@ -32,7 +34,7 @@ const attendanceGetControl = {
 
     getTodayAttendance: async function (req, res) {
         const todayTotal = mongoose.model('todaytotal')
-        const response = await todayTotal.find({ depName: { $in: ['BCA'] }, date: req.query.date }, { _id: 0, __v: 0 })
+        const response = await todayTotal.find({ depName: { $in: ['bca'] }, date: req.query.date }, { _id: 0, __v: 0 })
         if (response.length > 0) {
             res.status(200).send(response)
         } else {

@@ -28,3 +28,64 @@ http://localhost:3000/apiv1/add-subj
   "sem" : "2st",
   "subject" : "GDP" || ["GDP"]
 }
+
+
+### API for adding students to the attendance sheet - POST
+http://localhost:3000/apiv1/add-students-tosheet?q=bca_1sts
+{
+  "months": [
+    "jan",
+    "feb",
+    "march"
+  ],
+  "subjects": [
+    "cpp",
+    "java"
+  ],
+  "students": [
+    "663b2f78b30fbbd82956c7c7",
+    "663b34a205428e5eeacf86bb",
+    "663b3660fd40802b9dcf6db6"
+  ]
+}
+
+
+
+### API for adding attendance to the attendance sheet - POST
+http://localhost:3000/apiv1/set-attendance?q=bca_1sts
+{
+  "lastattendancedate": "09-06-2024",
+  "lastatttendent": "dhop manuh",
+  "month": "jan",
+  "subject": "java",
+  "attendance": [
+    {
+      "rollno": "663b2f78b30fbbd82956c7c7",
+      "p": 0,
+      "a": 1
+    },
+    {
+      "rollno": "663b34a205428e5eeacf86bb",
+      "p": 1,
+      "a": 0
+    },
+    {
+      "rollno": "663b3660fd40802b9dcf6db6",
+      "p": 0,
+      "a": 1
+    }
+  ]
+}
+
+### API for adding new subject to the attendance sheet - POST
+http://localhost:3000/apiv1/​create-subject?q=bca_1sts
+{
+  "subject" : "DSA"
+}
+
+
+### API for adding months to subject in the attendance sheet - POST
+http://localhost:3000/apiv1/create-month?q=bca_1sts
+{
+  "month" : ["feb", "march"]
+}
