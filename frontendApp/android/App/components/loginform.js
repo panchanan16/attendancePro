@@ -14,7 +14,6 @@ export default function LoginForm({ head, nav }) {
     async function loginUser() {
         if (email && password) {
             const req = await _POST('auth/apiv1/admin-login', { email, password })
-            console.log(req.msg.userInfo);
             if (req.status && req.msg.token) {
                 await storeData(req.msg.token)
                 setuserInfo(req.msg.userInfo[0])

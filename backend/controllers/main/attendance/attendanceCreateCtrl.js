@@ -34,15 +34,21 @@ const attendanceCreateControl = {
     getAttendanceVerify: async function (req, res) {
         const { sub, date } = req.body
         const attendance = mongoose.model(req.query.q, attendanceSchema);
-        const subcheck = await attendance.find({ 'attendance.sub': sub }, { rollno: 1 }).limit(50)
+        const subcheck = await attendance.find({ 'attendance.sub': sub }, { 'attendance.sub': 1 , 'attendance.lastattendance': 1}).limit(20)
 
         if (subcheck && subcheck.length > 0) {
+            const verification = []
+            subcheck.forEach((el)=> {
+                const target = el.attendance.find((e)=> e.sub === sub);
+                if(target.sub == sub && target.lastattendance == date) {
+                    verification.push(false)
+                }
+            })
 
-            const dateCheck = await attendance.find({'attendance.sub': sub, 'attendance.lastattendance': date }, { rollno: 1 })
-
-            if (dateCheck && dateCheck.length > 0) {
+            if(verification.includes(false)) {
                 return res.status(500).send({ result: false, msg: "Invalid selection ❌" });
             }
+
             return res.status(200).send({ result: true });
 
         } else {

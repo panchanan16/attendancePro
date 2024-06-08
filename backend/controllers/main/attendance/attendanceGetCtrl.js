@@ -8,28 +8,35 @@ const attendanceSchema = new mongoose.Schema({
 })
 
 const attendanceGetControl = {
-
     getAttendance: async function (req, res) {
         const attendance = mongoose.model(req.query.q, attendanceSchema);
         try {
             const data = await attendance.find()
             res.status(200).send(data)
         } catch (error) {
-            console.log(error)
             res.status(500).send({ msg: "Something error occured in Insertion" })
         }
     },
 
     getTodayAttendancePerSubject: async function (req, res) {
         const attendance = mongoose.model(req.query.q, attendanceSchema)
-        const response = await attendance.find(
-            { attendance: { $elemMatch: { sub: req.query.sub } }, 'attendance.lastattendance': req.query.date },
-            {rollId: 1, 'attendance.sub': 1, 'attendance.todayabsent': 1, 'attendance.todaypresent': 1})
-        if (response.length > 0) {
-            return res.status(200).send(response)
-        } else {
-            return res.status(500).send({ msg: "data do not exist!" })
+        const aggregate = await attendance.aggregate([
+            {
+                $lookup: {
+                    from: 'students',
+                    localField: 'rollId',
+                    foreignField: '_id',
+                    as: 'studentsData'
+                }
+            },
+            { $match: { attendance: { $elemMatch: { sub: req.query.sub } }, 'attendance.lastattendance': req.query.date } },
+            { $project:{rollId: 1, 'attendance.sub': 1, 'attendance.todayabsent': 1, 'attendance.todaypresent': 1, 'studentsData.name': 1, 'studentsData.rollno': 1} }
+        ]);
+        if(aggregate.length > 0) {
+            return res.status(200).send(aggregate)
         }
+        return res.status(500).send(aggregate)
+        
     },
 
     getTodayAttendance: async function (req, res) {
@@ -45,21 +52,32 @@ const attendanceGetControl = {
     getOverallAttendancePerSubject: async function (req, res) {
         try {
             const attendance = mongoose.model(req.query.q, attendanceSchema);
-            const response = await attendance.find(
-                { 'attendance.sub': req.query.sub },
-                { rollno: 1, 'attendance.sub': 1, 'attendance.month': 1 }
-            )
+            const response = await attendance.aggregate([
+                {
+                    $lookup: {
+                        from:'students',
+                        localField: 'rollId',
+                        foreignField: '_id',
+                        as:'studentsData'
+                    }
+                },
+                { $match: { attendance: { $elemMatch: { sub: req.query.sub } } } },
+                { $project: { 'attendance.sub': 1, 'attendance.month': 1,'studentsData.name': 1,'studentsData.rollno': 1 } }
+            ]);
             const sendData = [];
-            response.forEach((Student) => {
-                const monthData = Student.attendance[0].month;
+            response.forEach((Student) => {    
+                const targetSubject = Student.attendance.find((subj)=> subj.sub == req.query.sub)
+                const monthData = targetSubject.month;
+
                 let p = 0;
                 let a = 0;
+
                 monthData.forEach((month) => {
                     p += month.count.p
                     a += month.count.a
                 })
-                // console.log('Roll no: ' + Student.rollno + 'Present: ' + p + 'Absent: ' + a);
-                sendData.push({ rollno: Student.rollno, present: p, absent: a })
+
+                sendData.push({ details: Student.studentsData[0], present: p, absent: a })
             })
             res.status(200).send({ sendData })
         } catch (error) {

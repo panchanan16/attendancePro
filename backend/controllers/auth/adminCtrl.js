@@ -24,7 +24,7 @@ const adminControl = {
 
     adminLogin: async function (req, res) {
         const { email, password } = req.body
-        const response = await adminModel.find({ email: email }, { email: 1, name: 1, password: 1})
+        const response = await adminModel.find({ email: email }, { email: 1, name: 1, password: 1, departments: 1})
         if (response[0]?.password) {
             const verify = await bcrypt.compare(password, response[0].password);
             if (verify) {

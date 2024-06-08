@@ -12,6 +12,7 @@ const SwipeButtonCA = ({nav}) => {
     
     async function gotoAttendanceList() {
         if (selecteddepartment && selectedsemester && selectedsubject) {
+            console.log(selectedsubject);
             const todayDate = dayjs().format('DD-MM-YYYY')
             const displayData = {depName: selecteddepartment, semester: selectedsemester, subject: selectedsubject}
 

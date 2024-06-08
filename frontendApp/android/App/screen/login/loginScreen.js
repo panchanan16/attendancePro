@@ -11,7 +11,7 @@ import { AuthContext } from '../../../contexts/userContext'
 export default function LoginScreen({ navigation }) {
     const [loginType, setloginType] = useState(true)
     const {username} = useContext(AuthContext)
-    console.log(username);
+    
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }} >
             <StatusBar />

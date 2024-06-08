@@ -1,5 +1,5 @@
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
-import {useContext, useState} from 'react'
+import { View, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native'
+import {useContext} from 'react'
 import { AuthContext } from '../../../contexts/userContext';
 import DepartmentToSem from '../../components/departmentToSem';
 
@@ -11,9 +11,9 @@ const Department = ({navigation}) => {
             <View style={{ height: '92%', paddingBottom: 10, marginTop: 15 }}>
                 <ScrollView>
                     {
-                        userInfo && userInfo?.departments.map((el, key) => (
+                        userInfo ? userInfo?.departments?.map((el, key) => (
                            <DepartmentToSem depname={el} key={key} nav={navigation} />
-                        ))
+                        )) : <ActivityIndicator size={'large'} />
                     }
                 </ScrollView>
             </View>

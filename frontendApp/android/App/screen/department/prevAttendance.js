@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { _GET } from '../../../utils/apiReq';
 
-const PrevAttendance = ({route}) => {
+const PrevAttendance = ({ route }) => {
     const { department, sem, subject } = route.params;
     const { width, height } = useWindowDimensions();
     const [attendancePerSub, setAttendancePerSub] = useState([])
@@ -18,6 +18,7 @@ const PrevAttendance = ({route}) => {
         }
         getStudentAttendance()
     }, [subject])
+
     return (
         <SafeAreaView style={{ backgroundColor: '#f0f0f5', height: '100%', flex: 1 }}>
             <View style={[styles.abox, { height: height / 6 }]}>
@@ -26,7 +27,7 @@ const PrevAttendance = ({route}) => {
                     <View style={styles.headBox}>
                         <View style={styles.iconBox}>
                             <Entypo name="open-book" size={20} color="black" />
-                            <Text style={styles.subheading}>Web development</Text>
+                            <Text style={styles.subheading}>{subject && subject.toUpperCase()}</Text>
                         </View>
                         <View style={styles.iconBox}>
                             <FontAwesome5 name="book-reader" size={20} color="black" />
@@ -43,7 +44,10 @@ const PrevAttendance = ({route}) => {
                             <View key={key} style={styles.student}>
                                 <View style={styles.studentBox}>
                                     <MaterialCommunityIcons name="face-man" size={24} color="black" />
-                                    <Text>{el.rollno}</Text>
+                                    <View>
+                                        <Text style={{fontSize: 13, fontWeight: 500}}>{el.details?.name}</Text>
+                                        <Text style={{fontSize: 11}}>{el.details?.rollno}</Text>
+                                    </View>
                                 </View>
                                 <View style={{ flexDirection: 'row', gap: 5 }}>
                                     <View style={{ ...styles.status, backgroundColor: '#53c68c' }}>
