@@ -29,9 +29,24 @@ const subjControll = {
             {subjects: {$elemMatch: { sem: req.query.sem }}, name: 1}
         )
         if(query.length > 0) {
+            console.log(query);
             return res.status(200).send(query[0].subjects[0].sub)
         }
         return res.status(500).send({msg: "No data can be found!"})
+    },
+
+    getSubjByDep : async function(req, res) {
+        const query = await createSubjModel.find(
+            {name: req.query.dep},
+        )
+        if(query.length > 0) {
+            return res.status(200).send(query[0].subjects)
+        }
+        return res.status(500).send({msg: "No data can be found!"})
+    },
+
+    deleteSubj : async function(req, res) {
+        const query = await createSubjModel.deleteOne({name: req.query.dep, 'subjects.sub' : req.query.sub})
     }
 }
 

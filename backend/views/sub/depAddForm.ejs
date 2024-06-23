@@ -1,0 +1,24 @@
+<div id="add-dep" class="p-10 hidden flex-col justify-center items-center bg-white w-[39%] rounded-lg">
+    <button onclick="closeOverlay('settings-overlay', 'add-dep')" class="bg-red-100 text-red-600 self-end p-2 rounded-xl flex items-center hover:bg-red-200">
+        <span class="material-symbols-outlined inline-block font-bold">close</span>
+    </button>
+
+    <form id="dep-add-form" class="flex flex-col gap-10 w-full mt-5">   
+        <div>
+            <input class="border-2 border-[#1a40db] p-3  w-[98%] rounded-lg" type="text" name="department" id="" placeholder="Enter department Name">
+        </div>
+        <div>
+            <select name="session" class="bg-[#dae8ff] text-[#1a40db] p-3 w-[98%] rounded-lg font-semibold">
+                <option value="">Select session</option>
+                <option value="1st_3rd_5th">1st 3rd 5th</option>
+                <option value="2nd_4th_6th">2nd 4th 6th</option>
+            </select>
+        </div>
+      
+        <div>
+            <button onclick="addOrUpdateDepartment(event, 'apiv1/add-session', this, 'dep-add-form')" class="bg-[#2254ee] p-3 px-8 rounded-xl font-bold text-white hover:bg-blue-300">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>

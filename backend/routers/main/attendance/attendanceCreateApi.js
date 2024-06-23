@@ -7,6 +7,7 @@ attendanceRouter.post('/create-month', attendanceController.addMonth)
 attendanceRouter.post('/set-attendance', attendanceController.setAttendance)
 attendanceRouter.post('/verify-attendance', attendanceController.getAttendanceVerify)
 attendanceRouter.post('/add-students-tosheet', attendanceController.addStudentSheet)
+attendanceRouter.post('/add-students-onedit', attendanceController.addStudentSheetOnEdit)
 
 // 1. create createAttendanceSheet.
 // 2. create subject.

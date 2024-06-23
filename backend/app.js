@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const attendance = require('./utils/arrangeWithDate')
 const compression = require('compression');
+const path = require('path');
 // const cpuProfilerMiddleware = require('./middlewares/checkPerformance');
 require('dotenv').config();
 const connect = require('./config/db.connect')
@@ -9,7 +10,12 @@ const connect = require('./config/db.connect')
 //App process
 app.use(compression());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 // app.use(cpuProfilerMiddleware);
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs')
+app.use(express.static(path.join(__dirname, 'public')))
 
 
 //Routers 
@@ -20,6 +26,10 @@ const attendanceRoutesG = require('./routers/main/attendance/attendanceGetApi')
 const adminRoutes = require('./routers/auth/adminApi')
 const sessionRoutes = require('./routers/main/sessionApi')
 const subjRoutes = require('./routers/main/subjApi')
+const sheetsRoutes = require('./routers/main/sheetsApi')
+
+// Pages Routes 
+const pageRoutes = require('./routers/pages/pages')
 
 
 //Routes--
@@ -30,6 +40,10 @@ app.use('/apiv1', attendanceRoutesG);
 app.use('/apiv1', sessionRoutes);
 app.use('/apiv1', subjRoutes);
 app.use('/auth/apiv1', adminRoutes);
+app.use('/apiv1', sheetsRoutes)
+
+// page 
+app.use('/', pageRoutes);
 
 
 app.listen(3000, () => console.log('Our app listening on port 3000!🚀'));

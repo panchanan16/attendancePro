@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="/output.css">
+    <link rel="stylesheet" href="/extra.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <main class="flex w-full">
+        <%- include('../sub/navbar') %>
+
+            <section class="bg-white flex-1 h-screen">
+                <div class="mx-10 mt-10 flex gap-10 items-center">
+                    <div class="bg-[#eff5ff] w-full">
+                        <div id="chart" class="p-5 flex justify-center">
+                            <img src="./img/OIP.png" height="200px" width="200px" alt="pie_chart">
+                        </div>
+                    </div>
+                    <div class="bg-[#eff5ff] w-full">
+                        <div id="chart" class="p-5 flex justify-center">
+                            <img src="./img/graph.png" height="300px" width="300px" alt="pie_chart">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#eff5ff] mt-10 mx-10 h-[25rem] w-[95%]">
+                    <div class="flex items-center p-3 ml-10">
+                        <span class="text-2xl font-bold">Department Today Attendance</span>
+                    </div>
+                    <div class="department mx-10 flex gap-10 max-w-[70rem] mt-5 h-[18rem] overflow-x-scroll">              
+                        <%- include('../sub/departmentTA') %>
+                        <%- include('../sub/departmentTA') %>
+                        <%- include('../sub/departmentTA') %>
+                        <%- include('../sub/departmentTA') %>
+                        <%- include('../sub/departmentTA') %>
+                    </div>
+                </div>
+            </section>
+    </main>
+</body>
+
+<script src="./js/script.js"></script>
+<script src="/js/module/module.js"></script>
+<script src="/js/dash.js"></script>
+
+</html>

@@ -16,7 +16,7 @@ const SwipeButtonCA = ({nav}) => {
             const todayDate = dayjs().format('DD-MM-YYYY')
             const displayData = {depName: selecteddepartment, semester: selectedsemester, subject: selectedsubject}
 
-            const req = await _POST(`apiv1/verify-attendance?q=${selecteddepartment}_${selectedsemester}s`, { sub: selectedsubject, date: todayDate })
+            const req = await _POST(`apiv1/verify-attendance?q=${selecteddepartment}_${selectedsemester}_2024`, { sub: selectedsubject, date: todayDate })
 
             if (req && req.status && req.msg.result) {
                 nav.navigate('showSheet', { displayData } )

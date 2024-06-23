@@ -22,11 +22,11 @@ http://localhost:3000/apiv1/get-subj?dep=BBA&sem=3st
 
 
 ### API for adding subject per sem of deparment - POST
-http://localhost:3000/apiv1/add-subj
+http://localhost:3000/apiv1/add-subj?q=bc_1st
 {
   "department" : "BBA",
   "sem" : "2st",
-  "subject" : "GDP" || ["GDP"]
+  "subject" : ["GDP"]
 }
 
 
@@ -88,4 +88,11 @@ http://localhost:3000/apiv1/​create-subject?q=bca_1sts
 http://localhost:3000/apiv1/create-month?q=bca_1sts
 {
   "month" : ["feb", "march"]
+}
+
+
+### API for adding sheets - POST
+http://localhost:3000/apiv1/add-sheets
+{
+  "sheetName" : "bca_1st_2023"
 }

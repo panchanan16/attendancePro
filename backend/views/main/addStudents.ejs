@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="/output.css">
+    <link rel="stylesheet" href="/css/addStud.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <main class="flex w-full">
+        <%- include('../sub/navbar') %>
+            <section class="w-full">
+                <div class="flex justify-between items-center mx-10 mt-5">
+                    <div class="flex items-center">
+                        <div>
+                            <input class="p-3 border-2 border-[#2254ee] rounded-lg w-[20rem]" type="text" name="" id=""
+                                placeholder="search for students..">
+                        </div>
+                        <div>
+                            <select id="select-dep" class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                                <option value="">select department</option>
+                                <option value="BCA">BCA</option>
+                                <option value="BBA">BBA</option>
+                                <option value="BCOM">BCOM</option>
+                                <option value="BSC">BSC</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select id="select-sem" class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                                <option value="">select semester</option>
+                                <option value="1st">1st</option>
+                                <option value="2nd">2nd</option>
+                                <option value="3rd">3rd</option>
+                                <option value="4th">4th</option>
+                            </select>
+                        </div>
+                        <div onclick="searchStudents()">
+                            <a class="bg-[#dae8ff] p-2 rounded-xl px-4 ml-5 flex items-center hover:bg-blue-200">
+                                <span class="material-symbols-outlined font-bold text-[#2254ee]">search</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div onclick="proceedStudentList()">
+                        <a
+                            class="hover:bg-[#c2d9ff] flex items-center gap-2 p-3 border-2 bg-[#2254ee] text-white font-bold rounded-lg w-[8rem]">
+                            <span class="material-symbols-outlined text-white">person_add</span>proceed
+                        </a>
+                    </div>
+                </div>
+
+                <!-- students data -->
+                <div class="mt-10 w-full">
+                    <div class="table-head">
+                        <div class="flex items-end gap-10">
+                            <h3 class="text-2xl font-bold ml-10">Students Database</h3>
+                            <div class="flex items-center justify-center gap-3">
+                                <span class="font-semibold">Select All</span>
+                                <input onchange="checkAll(this)" type="checkbox" name="" id="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-body mt-5 mx-10">
+                        <table class="p-[1rem] border-collapse text-left w-[80vw]">
+                            <thead class="sticky top-0 left-0 bg-[#eff5ff] rounded-lg">
+                                <tr>
+                                    <th class="p-[1rem] border-collapse text-left">rollNo.</th>
+                                    <th class="p-[1rem] border-collapse text-left">Name</th>
+                                    <th class="p-[1rem] border-collapse text-left">department</th>
+                                    <th class="p-[1rem] border-collapse text-left">semester</th>
+                                    <th class="p-[1rem] border-collapse text-left">year</th>
+                                </tr>
+                            </thead>
+                            <tbody id="students-list">  
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+    </main>
+    <script src="/js/module/module.js"></script>
+    <script src="/js/addStud.js"></script>
+</body>
+
+</html>

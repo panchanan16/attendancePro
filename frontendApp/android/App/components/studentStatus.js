@@ -51,7 +51,7 @@ const StudentStatus = ({ details }) => {
                 <MaterialCommunityIcons name="face-man" size={30} color="black" />
                 <View>
                     <Text style={{fontWeight: 500}}>{details && details.name}</Text>
-                    <Text style={{fontSize: 12}}>{details && details._id}</Text>
+                    <Text style={{fontSize: 12}}>{details && details.rollno}</Text>
                 </View>
             </View>
         </Pressable>

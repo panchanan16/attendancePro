@@ -29,7 +29,7 @@ const AttendanceSheet = ({ route }) => {
     if (studentsToDatabase.length === students.length) {
       const dataToSend = {subject: displayData.subject, month: "jan", todayTotalPresent, todayTotalAbsent, depName: displayData.depName, lastattendancedate: todayDate, attendance: studentsToDatabase}
 
-      const req = await _POST(`apiv1/set-attendance?q=${displayData.depName}_${displayData.semester}s`, dataToSend)
+      const req = await _POST(`apiv1/set-attendance?q=${displayData.depName}_${displayData.semester}_2024`, dataToSend)
 
       if (req.status) {
         Alert.alert(req.msg.msg)
@@ -41,7 +41,7 @@ const AttendanceSheet = ({ route }) => {
 
   useEffect(() => {
     async function getStudentListForAttendance() {
-      const req = await _GET('apiv1/get-student')
+      const req = await _GET(`apiv1/get-student-for-attendance?q=${displayData.depName}_${displayData.semester}_2024`)
       if (req) {
         setStudents(req)
         return req;

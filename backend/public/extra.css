@@ -1,0 +1,14 @@
+.department::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+.department::-webkit-scrollbar-thumb {
+   background-color: rgba(99, 99, 99, 0.4);
+   border-radius: 5px;
+   visibility: hidden;
+}
+
+.department:hover::-webkit-scrollbar-thumb {
+    visibility: visible;
+ }

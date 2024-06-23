@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="/output.css">
+    <link rel="stylesheet" href="/css/settings.css">
+    <link rel="stylesheet" href="/extra.css">
+    <link rel="stylesheet" href="/css/studentExtra.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Document</title>
+</head>
+
+<body onload="getSubjects('BCA')">
+    <main class="flex w-full">
+        <%- include('../sub/navbar') %>
+            <section class="w-full">
+                <div class="flex justify-around m-10 gap-5">
+                    <div class="border-2 w-[30rem] h-[35rem]">
+                        <div class="flex justify-between items-center border-b-2 p-3 px-5">
+                            <span class="font-bold text-2xl text-blue-900">Department</span>
+                            <button onclick="showOverlay('settings-overlay', 'add-dep')" class="hover:bg-blue-300 flex gap-2 items-center bg-[#2254ee] p-2 rounded-lg px-3">
+                                <span class="font-semibold text-white">Add New</span>
+                                <span class="material-symbols-outlined text-white">add</span>
+                            </button>
+                        </div>
+                        <div id="dep-box" class="flex flex-col pb-5 h-[30rem] overflow-y-scroll department">
+                            <% sendData.currentSession.forEach((el)=>{ %>
+                                <div class="flex justify-between items-center mx-5 p-2 border-b-2">
+                                    <div><span class="font-semibold"><%= el.department %></span></div>
+                                    <div><span class="font-bold"><%= el.session.join('-') %></span></div>
+                                    
+                                    <div>
+                                        <span id="<%= el.id %>" onclick="showUpdateForm('settings-overlay', this)" class="material-symbols-outlined text-blue-800 hover:text-blue-300">edit</span>
+                                        <span class="material-symbols-outlined text-red-600 hover:text-red-300" id="<%= el.id %>" onclick="deleteDepartment(this)">delete</span>                                 
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                    <div class="border-2 w-[40rem] h-[35rem]">
+                        <div class="flex justify-between items-center border-b-2 p-3 px-5">
+                            <span class="font-bold text-2xl text-blue-900">Subjects</span>
+                            <div>
+                                <select onchange="getSubjects(false, this)" class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                                    <% sendData.currentSession?.forEach((dep)=> { %>
+                                        <option value="<%= dep.department %>" <%= dep.department == "BCA" ? "selected" : "" %> ><%= dep.department %></option>
+                                    <% }) %>        
+                                </select>
+                            </div>
+                            <button onclick="showOverlay('settings-overlay', 'add-sub')" class="hover:bg-blue-300 flex gap-2 items-center bg-[#2254ee] p-2 rounded-lg px-3">
+                                <span class="font-semibold text-white">Add New</span>
+                                <span class="material-symbols-outlined text-white">add</span>
+                            </button>
+                        </div>
+                        <div id="sub-box" class="flex flex-col pb-5 h-[30rem] department overflow-y-scroll">
+                                                      
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- overlay start here -->
+
+            <section id="settings-overlay" class="opa hidden absolute top-0 left-0 right-0 bottom-0 items-center justify-center">
+                <%- include('../sub/depAddForm.ejs') %>
+                <%- include('../sub/subAddForm.ejs', {sendData}) %>
+            </section>
+    </main>
+
+    <script src="/js/module/module.js"></script>
+    <script src="/js/settings.js"></script>
+</body>
+
+</html>

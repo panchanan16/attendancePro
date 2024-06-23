@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="/output.css">
+    <link rel="stylesheet" href="/css/createAttendance.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <main class="flex w-full">
+        <%- include('../sub/navbar') %>
+            <section class="flex justify-center items-center w-full">
+                <div class="h-[20rem] flex flex-col items-center gap-10 bg-[#eff5ff] p-[2rem] py-[3rem] rounded-lg">
+                    <div>
+                        <span class="text-3xl font-bold text-[#162055]">Name configuration</span>
+                    </div>
+                    <div class="">
+                        <select id="select-dep" class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                            <option value="">select department</option>
+                            <option value="bca">BCA</option>
+                            <option value="bba">BBA</option>
+                            <option value="bcom">BCOM</option>
+                            <option value="bsc">BSC</option>
+                        </select>
+                        <select id="select-sem" class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                            <option value="">select semester</option>
+                            <option value="1st">1st</option>
+                            <option value="2nd">2nd</option>
+                            <option value="3rd">3rd</option>
+                            <option value="4th">4th</option>
+                        </select>
+                        <select onchange="addQueryToURL(this)" class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                            <option value="">select year</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                    <div class="ml-auto">
+                        <a onclick="goToNextPage()" class="hover:bg-blue-300 flex items-center gap-2 bg-[#2254ee] p-2 px-4 rounded-lg">
+                            <span class="text-lg font-semibold text-white">Next</span>
+                            <span class="material-symbols-outlined text-white">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+    </main>
+    <script src="/js/createAtt.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="/output.css">
+    <link rel="stylesheet" href="/extra.css">
+    <link rel="stylesheet" href="/css/analyt.css">
+    <link rel="stylesheet" href="/css/studentExtra.css">
+    <title>Document</title>
+</head>
+
+<body onload="getAttendanceData('month')">
+    <main class="flex w-full">
+        <%- include('../sub/navbar') %>
+            <section class="w-full">
+                <div class="flex justify-between items-center mx-10 mt-5">
+                    <div class="flex items-center gap-2">
+                        <div>
+                            <input class="p-3 border-2 border-[#2254ee] rounded-lg w-[20rem]" type="text" name="" id=""
+                            placeholder="search for students..">
+                        </div>
+                        <div>
+                            <select class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                                <option value="">select semester</option>
+                                <option value="x">BCA</option>
+                                <option value="x">BCA</option>
+                                <option value="x">BCA</option>
+                                <option value="x">BCA</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                                <option value="">select year</option>
+                                <option value="x">BCA</option>
+                                <option value="x">BCA</option>
+                                <option value="x">BCA</option>
+                                <option value="x">BCA</option>
+                            </select>
+                        </div>
+                        <div onclick="searchStudents()">
+                            <a class="bg-[#dae8ff] p-2 rounded-xl px-4 ml-5 flex items-center hover:bg-blue-200">
+                                <span class="material-symbols-outlined font-bold text-[#2254ee]">search</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="w-[85vw] mt-10 ml-10">
+                    <div class="flex gap-2 items-center">
+                        <h2 class="text-xl font-bold">View By</h2>
+                        <div>
+                            <select onchange="getAttendanceData(false, this)" class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                                <option value="month">Month</option>
+                                <option value="x">Subjects</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-body mt-5 mx-3">
+                        <table class="p-[1rem] border-collapse text-left w-[82vw]">
+                            <thead class="sticky top-0 left-0 bg-[#eff5ff] rounded-xl">
+                                <tr id="table-heading">
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="table-body-data">
+                                    <!-- <tr>
+                                        <td class="p-[1rem] border-collapse text-left">1</td>
+                                        <td class="p-[1rem] border-collapse text-left" id="">Panchanan deka</td>
+                                        <td class="p-[1rem] border-collapse text-left">BCA</td>
+                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
+                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
+                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
+                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
+                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
+                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
+                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
+                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
+                                        
+                                    </tr> -->
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+    </main>
+
+    <script src="/js/module/module.js"></script>
+    <script src="/js/analyt.js"></script>
+</body>
+
+</html>
