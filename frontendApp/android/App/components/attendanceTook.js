@@ -13,7 +13,7 @@ const AttendanceTook = ({navi, todayData}) => {
 
     async function getTodayAttendance() {
         const req = await _GET(`apiv1/getToday-Attendance?date=${todayDate}`)
-        if (req) { setattendanceData(req) }
+        if (req) { console.log(req); setattendanceData(req) } else {setattendanceData([])}
         return;
     }
 
@@ -29,16 +29,20 @@ const AttendanceTook = ({navi, todayData}) => {
       getTodayAttendance()
   }, [])
 
+
     return (
         <View style={{ height: `${height > 800 ? '92%' : '91%'}`, paddingBottom: 10, marginTop: 15 }}>
             <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 {
                     attendanceData.length > 0 && attendanceData.map((el, key) => (
-                    <TouchableOpacity key={key} onPress={()=> navi.navigate('Sheet', {subject: el.subject, depName: el.depName, tp: el.todayTotalPresent, ta: el.todayTotalAbsent})}>
+                    <TouchableOpacity key={key} onPress={()=> navi.navigate('Sheet', {subject: el.subject, semName: el.semName, depName: el.depName, tp: el.todayTotalPresent, ta: el.todayTotalAbsent})}>
                         <View style={styles.abox}>
                             <View>
                                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline'}}>
-                                  <Text style={styles.heading}>{el.depName}</Text>
+                                  <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
+                                    <Text style={styles.heading}>{el.depName.toUpperCase()}</Text>
+                                    <Text style={{fontWeight: 500}}>{el.semName} sem</Text>
+                                  </View>
                                   <Text style={{...styles.subheading, color:'#8A8D8B'}}>Panchanan Deka</Text>
                                 </View>
                                 <Text style={styles.subheading}>{el.subject }</Text>
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: '100%',
         border: '1px solid black',
-        height: 100,
+        height: 110,
         display: 'flex',
         flexDirection: 'column',
         gap: 2,

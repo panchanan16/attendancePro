@@ -11,6 +11,7 @@ const attendanceSchema = new mongoose.Schema({
 const attendanceCreateControl = {
     addStudentSheet: async function (req, res) {
         try {
+            console.log(req.body.students);
             const sheetRespond = await sheetModel.find({ name: req.query.q })
             if (sheetRespond.length > 0) {
                 return res.status(500).send({ msg: "Sheet Already exist" })
@@ -165,7 +166,7 @@ const attendanceCreateControl = {
             const result = await attendance.bulkWrite(bulkIns);
             if (result.modifiedCount > 0) {
                 const totalInsert = await todayTotal.updateOne(
-                    { subject: req.body.subject, depName: req.body.depName },
+                    { subject: req.body.subject, depName: req.body.depName, semName: req.query.q.split('_')[1] },
                     { date: req.body.lastattendancedate, todayTotalPresent: req.body.todayTotalPresent, todayTotalAbsent: req.body.todayTotalAbsent }, { upsert: true }
                 )
                 return res.status(200).send({ msg: "Attendance updated successfully" })

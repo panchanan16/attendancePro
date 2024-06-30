@@ -6,11 +6,12 @@ import dayjs from 'dayjs';
 
 export default function DisplayAttendancedetails({ attendanceMetaData }) {
     const [status, setstatus] = useState([])
-    const { subject, depName } = attendanceMetaData
+    const { subject, depName, semName } = attendanceMetaData
+    console.log( subject, depName, semName);
     const todayDate = dayjs().format('DD-MM-YYYY')
     useEffect(() => {
         async function getStudentStatus() {
-            const req = await _GET(`apiv1/get-Attendance-Per-Subject?sub=${subject}&q=${depName}_1st&date=${todayDate}`)
+            const req = await _GET(`apiv1/get-Attendance-Per-Subject?sub=${subject}&q=${depName}_${semName}_${new Date().getFullYear()}&date=${todayDate}`)
             if (req) {
                 const data = []
                 req.forEach((stud) => {
