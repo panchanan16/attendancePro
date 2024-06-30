@@ -2,7 +2,6 @@
 const mongoose = require('mongoose');
 const todayTotal = require('../../../models/main/totalModel');
 const sheetModel = require('../../../models/main/sheetsCollectionModel')
-
 const attendanceSchema = new mongoose.Schema({
     rollId: { type: mongoose.Schema.Types.ObjectId, ref: 'students', required: true, unique: true },
     attendance: { type: [{ _id: false, sub: String, todaypresent: Number, todayabsent: Number, todaytotalrecord: Number, lastattendance: String, lastatttendent: String, month: { type: [{ _id: false, name: String, count: { p: Number, a: Number }, presentDate: { type: [String] } }] } }] }
@@ -11,7 +10,6 @@ const attendanceSchema = new mongoose.Schema({
 const attendanceCreateControl = {
     addStudentSheet: async function (req, res) {
         try {
-            console.log(req.body.students);
             const sheetRespond = await sheetModel.find({ name: req.query.q })
             if (sheetRespond.length > 0) {
                 return res.status(500).send({ msg: "Sheet Already exist" })
@@ -23,7 +21,6 @@ const attendanceCreateControl = {
             const studentsArray = req.body.students.map((stud) => {
                 return { rollId: stud, attendance: subjects }
             })
-
             const response = await attendance.insertMany(studentsArray)
             if (response.length > 0) {
                 await sheetModel.collection.insertOne({ name: req.query.q, students: req.body.students.length })
@@ -123,7 +120,7 @@ const attendanceCreateControl = {
 
     getAttendanceVerify: async function (req, res) {
         const { sub, date } = req.body
-        const attendance = mongoose.model(req.query.q, attendanceSchema);
+        const attendance = mongoose.models[req.query.q] || mongoose.model(req.query.q, attendanceSchema)
         const subcheck = await attendance.find({ 'attendance.sub': sub }, { 'attendance.sub': 1, 'attendance.lastattendance': 1 }).limit(20)
 
         if (subcheck && subcheck.length > 0) {
@@ -148,7 +145,7 @@ const attendanceCreateControl = {
     },
 
     setAttendance: async function (req, res) {
-        const attendance = mongoose.model(req.query.q, attendanceSchema);
+        const attendance = mongoose.models[req.query.q] || mongoose.model(req.query.q, attendanceSchema);
 
         const bulkIns = req.body.attendance.map((attend) => ({
             updateOne: {
@@ -174,6 +171,7 @@ const attendanceCreateControl = {
             return res.status(500).send({ msg: "Something went wrong!" })
         } catch (err) {
             console.error(err);
+            return res.status(500).send({ msg: "Something went wrong!" })
         }
 
     }

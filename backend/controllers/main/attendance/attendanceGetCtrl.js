@@ -1,10 +1,9 @@
 // const attendance = require('../../models/main/attendanceModel')
 const mongoose = require('mongoose');
 const fs = require('fs')
-
 const attendanceSchema = new mongoose.Schema({
-    rollno: { type: String, required: true, unique: true },
-    attendance: { type: [{ _id: false, sub: String, lastattendance: String, lastatttendent: String, month: { type: [{ _id: false, name: String, count: { p: Number, a: Number } }] } }] }
+    rollId: { type: mongoose.Schema.Types.ObjectId, ref: 'students', required: true, unique: true },
+    attendance: { type: [{ _id: false, sub: String, todaypresent: Number, todayabsent: Number, todaytotalrecord: Number, lastattendance: String, lastatttendent: String, month: { type: [{ _id: false, name: String, count: { p: Number, a: Number }, presentDate: { type: [String] } }] } }] }
 })
 
 const attendanceGetControl = {
@@ -36,7 +35,7 @@ const attendanceGetControl = {
         }
     },
     getAttendance: async function (req, res) {
-        const attendance = mongoose.model(req.query.q, attendanceSchema);
+        const attendance = mongoose.models[req.query.q] || mongoose.model(req.query.q, attendanceSchema);
         try {
             const data = await attendance.find()
             res.status(200).send(data)
@@ -46,7 +45,7 @@ const attendanceGetControl = {
     },
 
     getTodayAttendancePerSubject: async function (req, res) {
-        const attendance = mongoose.model(req.query.q, attendanceSchema)
+        const attendance = mongoose.models[req.query.q] || mongoose.model(req.query.q, attendanceSchema)
         const aggregate = await attendance.aggregate([
             {
                 $lookup: {
@@ -68,7 +67,7 @@ const attendanceGetControl = {
 
     getTodayAttendance: async function (req, res) {
         const todayTotal = mongoose.model('todaytotal')
-        const response = await todayTotal.find({ depName: { $in: ['bca'] }, date: req.query.date }, { _id: 0, __v: 0 })
+        const response = await todayTotal.find({ depName: { $in: ['bca', 'bba'] }, date: req.query.date }, { _id: 0, __v: 0 })
         if (response.length > 0) {
             res.status(200).send(response)
         } else {
@@ -88,7 +87,7 @@ const attendanceGetControl = {
 
     getOverallAttendancePerSubject: async function (req, res) {
         try {
-            const attendance = mongoose.model(req.query.q, attendanceSchema);
+            const attendance = mongoose.models[req.query.q] || mongoose.model(req.query.q, attendanceSchema);
             const response = await attendance.aggregate([
                 {
                     $lookup: {
@@ -126,7 +125,7 @@ const attendanceGetControl = {
 
     getAttendanceByMonth: async function (req, res) {
         try {
-            const attendance = mongoose.model(req.query.q, attendanceSchema);
+            const attendance = mongoose.models[req.query.q] || mongoose.model(req.query.q, attendanceSchema);
             const response = await attendance.aggregate([
                 {
                     $lookup: {
@@ -136,7 +135,6 @@ const attendanceGetControl = {
                         as: 'studentsData'
                     }
                 },
-                // { $match: { attendance: { $elemMatch: { sub: req.query.sub } } } },
                 { $project: { 'attendance.sub': 1, 'attendance.month.name': 1, 'attendance.month.count': 1, 'studentsData.name': 1, 'studentsData.rollno': 1 } }
             ]);
             const sendData = response.map((item) => {
@@ -150,14 +148,12 @@ const attendanceGetControl = {
                         })
                     })
                     attendanceData.forEach((mon) => {
-                        let p = 0
-                        let a = 0
+                        let p = 0; let a = 0
                         mon.value.forEach((el) => {
                             p += el.p
                             a += el.a
                         })
-                        mon.ptotal = p
-                        mon.atotal = a
+                        mon.ptotal = p; mon.atotal = a
                     })
                     return attendanceData
                 })
@@ -179,7 +175,7 @@ const attendanceGetControl = {
 
     getAttendanceBySubject: async function (req, res) {
         try {
-            const attendance = mongoose.model(req.query.q, attendanceSchema);
+            const attendance = mongoose.models[req.query.q] || mongoose.model(req.query.q, attendanceSchema);
             const response = await attendance.aggregate([
                 {
                     $lookup: {

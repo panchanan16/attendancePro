@@ -8,12 +8,12 @@ import { AttedanceContext } from '../../contexts/attendanceSheetContext';
 const CreateSubList = () => {
     const [isFocus, setIsFocus] = useState(false);
     const [subjectList, setsubjectList] = useState([]);
-    const {selectedsemester, selectedsubject, setselectedsubject} = useContext(AttedanceContext)
+    const {selectedsemester, selectedsubject, selecteddepartment, setselectedsubject} = useContext(AttedanceContext)
 
     useEffect(()=> {
         async function getsubjectList() {
             if(selectedsemester === null) { return}
-            const req = await _GET(`apiv1/get-subj?dep=BCA&sem=${selectedsemester}`)
+            const req = await _GET(`apiv1/get-subj?dep=${selecteddepartment.toUpperCase()}&sem=${selectedsemester}`)
             if (req) {
                const subTemp = []
                req.length > 0 && req.forEach((sess) => {

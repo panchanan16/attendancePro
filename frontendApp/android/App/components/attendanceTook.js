@@ -13,7 +13,8 @@ const AttendanceTook = ({navi, todayData}) => {
 
     async function getTodayAttendance() {
         const req = await _GET(`apiv1/getToday-Attendance?date=${todayDate}`)
-        if (req) { console.log(req); setattendanceData(req) } else {setattendanceData([])}
+        console.log(req);
+        if (req) {setattendanceData(req)} else {setattendanceData([])}
         return;
     }
 
