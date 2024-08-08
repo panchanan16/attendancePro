@@ -4,7 +4,7 @@ import { SwipeButton } from 'react-native-expo-swipe-button';
 import { Feather } from '@expo/vector-icons';
 import DisplayAttendanceHead from '../../components/displayAttendanceHead'
 import StudentListForAttendance from '../../components/studentListForAttendance';
-import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
+import { verticalScale } from 'react-native-size-matters';
 import { _GET, _POST } from '../../../utils/apiReq';
 import StudentContext from '../../../contexts/studentContext';
 import dayjs from 'dayjs';

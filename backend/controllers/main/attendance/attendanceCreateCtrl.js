@@ -53,11 +53,11 @@ const attendanceCreateControl = {
                     subjects = req.body.subjects.map((sub) => {
                         return { sub: sub, lastattendance: "", lastatttendent: "", month: months }
                     })
-                }
+                }  
 
                 const studentsArray = req.body.students.map((stud) => {
                     return { rollId: stud, attendance: subjects }
-                })
+                }) 
 
                 const response = await attendance.insertMany(studentsArray)
                 if (response.length > 0) {

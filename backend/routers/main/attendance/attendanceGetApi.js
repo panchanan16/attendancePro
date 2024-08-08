@@ -10,6 +10,8 @@ attendanceGetRouter.get('/get-Attendance-by-month', attendanceGetController.getA
 attendanceGetRouter.get('/get-Attendance-by-subject', attendanceGetController.getAttendanceBySubject)
 attendanceGetRouter.get('/get-all-today-attendace', attendanceGetController.getAllTodayAttendace)
 attendanceGetRouter.get('/get-student-for-attendance', attendanceGetController.getStudentForAttendance)
+attendanceGetRouter.get('/get-dateof-attendance-per-student', attendanceGetController.getAttendanceDatePerMonthPerStudent)
+attendanceGetRouter.get('/get-studentlist-persheet', attendanceGetController.getStudentListPerSheet)
 
 
 module.exports = attendanceGetRouter

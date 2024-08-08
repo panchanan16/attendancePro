@@ -29,7 +29,7 @@ const studentControl = {
     },
     getWithFilter: async function (req, res) {
         try {
-            const students = await Student.find({ department: req.query.dep, sem: req.query.sem })
+            const students = await Student.find({ department: req.query.dep, year: req.query.sem })
             res.status(200).send(students)
         } catch (error) {
             console.log(error)

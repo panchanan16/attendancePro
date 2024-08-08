@@ -138,7 +138,7 @@ const attendanceGetControl = {
                 { $project: { 'attendance.sub': 1, 'attendance.month.name': 1, 'attendance.month.count': 1, 'studentsData.name': 1, 'studentsData.rollno': 1 } }
             ]);
             const sendData = response.map((item) => {
-                const attendanceData = [{ name: 'jan', value: [] }, { name: 'feb', value: [] }, { name: 'dec', value: [] }]
+                const attendanceData = [{ name: 'jan', value: [] }, { name: 'feb', value: [] }, { name: 'apr', value: [] }, { name: 'mar', value: [] }, { name: 'apr', value: [] }, { name: 'may', value: [] }, { name: 'Jun', value: [] }, { name: 'Jul', value: [] }, { name: 'Aug', value: [] }, { name: 'Sep', value: [] }, { name: 'oct', value: [] }, { name: 'nov', value: [] }, { name: 'dec', value: [] }]
                 item.attendance.map((sub) => {
                     sub.month.map((month) => {
                         attendanceData.forEach((obj) => {
@@ -160,6 +160,7 @@ const attendanceGetControl = {
 
 
                 return {
+                    id: item._id,
                     name: item.studentsData[0].name,
                     rollno: item.studentsData[0].rollno,
                     attendanceData
@@ -209,13 +210,76 @@ const attendanceGetControl = {
                     attendanceData.push(subjectTotal)
                 })
 
-                sendData.push({ name: Student.studentsData[0].name, rollno:  Student.studentsData[0].rollno, attendanceData })
+                sendData.push({ id: Student._id, name: Student.studentsData[0].name, rollno:  Student.studentsData[0].rollno, attendanceData })
             })
 
             res.status(200).send(sendData)
         } catch (error) {
             console.log(error);
             res.status(500).send({ msg: "Some error occcurd in fetching" })
+        }
+    },
+
+    getAttendanceDatePerMonthPerStudent : async function(req, res) {
+        try {
+            const attendance = mongoose.models[req.query.q] || mongoose.model(req.query.q, attendanceSchema);
+            const response = await attendance.aggregate([
+                {
+                    $match: { _id: new mongoose.Types.ObjectId(req.query.id)}
+                },
+                {
+                    $lookup: {
+                        from: 'students',
+                        localField: 'rollId',
+                        foreignField: '_id',
+                        as: 'studentsData'
+                    }
+                },
+                { 
+                    $project: { 'attendance.sub': 1, 'attendance.month.name': 1, 'attendance.month.count': 1, 'attendance.month.presentDate' : 1, 'studentsData.name': 1, 'studentsData.rollno': 1} 
+                }
+            ]);
+            // filter month--
+            let attendanceData = [];
+            response[0].attendance.forEach((sub)=> {
+                sub.month.forEach((monthData)=>{
+                    if(monthData.name == req.query.month) {
+                        attendanceData.push({sub: sub.sub, month: {mname: monthData.name, date: monthData.presentDate}})
+                        // console.log('data:- ', monthData.presentDate);
+                    }
+                })
+            })
+            // console.log(response[0].studentsData);
+            const sendData = { studentData: response[0].studentsData, attendanceData }
+            res.status(200).send({sendData})
+            
+        } catch (error) {
+            res.status(500).send({ msg: "Some error occcurd in"})
+            console.log(error);
+        }
+
+    },
+
+    getStudentListPerSheet: async function (req, res) {
+        try {
+            const attendance = mongoose.models[req.query.q] || mongoose.model(req.query.q, attendanceSchema);
+            const response = await attendance.aggregate([
+                {
+                    $lookup: {
+                        from: 'students',
+                        localField: 'rollId',
+                        foreignField: '_id',
+                        as: 'studentsData'
+                    }
+                },
+                { 
+                    $project: {'studentsData.name': 1, 'studentsData.rollno': 1} 
+                }
+            ]);
+            res.status(200).send({response})
+        } catch (error) {
+            res.status(500).send({msg: 'some internal error has occured'})
+            console.log(error); 
         }
     }
 }

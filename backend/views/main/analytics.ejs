@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="/output.css">
+    <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="/extra.css">
-    <link rel="stylesheet" href="/css/analyt.css">
     <link rel="stylesheet" href="/css/studentExtra.css">
+    <link rel="stylesheet" href="/extra.css">
     <title>Document</title>
 </head>
 
@@ -21,70 +21,110 @@
                     <div class="flex items-center gap-2">
                         <div>
                             <input class="p-3 border-2 border-[#2254ee] rounded-lg w-[20rem]" type="text" name="" id=""
-                            placeholder="search for students..">
+                                placeholder="search for students..">
                         </div>
                         <div>
-                            <select class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                            <select class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5" id="get-sem">
                                 <option value="">select semester</option>
-                                <option value="x">BCA</option>
-                                <option value="x">BCA</option>
-                                <option value="x">BCA</option>
-                                <option value="x">BCA</option>
+                                <option value="1st">1st</option>
+                                <option value="2nd">2nd</option>
+                                <option value="3rd">3rd</option>
+                                <option value="4th">4th</option>
+                                <option value="5th">5th</option>
+                                <option value="6th">6th</option>
                             </select>
-                        </div>
-                        <div>
-                            <select class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
-                                <option value="">select year</option>
-                                <option value="x">BCA</option>
-                                <option value="x">BCA</option>
-                                <option value="x">BCA</option>
-                                <option value="x">BCA</option>
-                            </select>
-                        </div>
-                        <div onclick="searchStudents()">
+                        </div>                        
+                        <div onclick="getAttendanceData('month')">
                             <a class="bg-[#dae8ff] p-2 rounded-xl px-4 ml-5 flex items-center hover:bg-blue-200">
                                 <span class="material-symbols-outlined font-bold text-[#2254ee]">search</span>
                             </a>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="w-[85vw] mt-10 ml-10">
                     <div class="flex gap-2 items-center">
                         <h2 class="text-xl font-bold">View By</h2>
                         <div>
-                            <select onchange="getAttendanceData(false, this)" class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
+                            <select onchange="getAttendanceData(false, this)"
+                                class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
                                 <option value="month">Month</option>
                                 <option value="x">Subjects</option>
                             </select>
                         </div>
                     </div>
-                    <div class="table-body mt-5 mx-3">
-                        <table class="p-[1rem] border-collapse text-left w-[82vw]">
-                            <thead class="sticky top-0 left-0 bg-[#eff5ff] rounded-xl">
-                                <tr id="table-heading">
-                                    
-                                </tr>
-                            </thead>
-                            <tbody id="table-body-data">
-                                    <!-- <tr>
-                                        <td class="p-[1rem] border-collapse text-left">1</td>
-                                        <td class="p-[1rem] border-collapse text-left" id="">Panchanan deka</td>
-                                        <td class="p-[1rem] border-collapse text-left">BCA</td>
-                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
-                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
-                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
-                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
-                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
-                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
-                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
-                                        <td class="p-[1rem] border-collapse text-left">1st sem</td>
-                                        
-                                    </tr> -->
+                    <div class="table-body mt-10 mx-3">
+                        <div class="h-[30rem] overflow-y-auto overflow-x-auto department">
+                            <table class="p-[1rem] border-collapse border-[1px] border-black text-left w-[100%]">
+                                <thead>
+                                    <tr id="table-heading">
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body-data" class="">                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- overlay work -->
+
+            <section id="student-overlay"
+                class="opa hidden absolute top-0 left-0 right-0 bottom-0 items-center justify-center">
+                <div class="w-[90%] bg-white h-[90%] rounded-lg p-2 items-center">
+
+                    <div class="flex justify-between items-center mx-10 mt-5">
+                        <div class="flex gap-5 items-center w-[100%]">
+                            <div>
+                                <input class="p-3 border-2 border-[#2254ee] rounded-lg w-[20rem]" type="text" name=""
+                                    id="" placeholder="search for students..">
+                            </div>
+
+                            <div class="ml-auto">
+                                <button onclick="closeOverlay('student-overlay')"
+                                    class="bg-red-100 text-red-600 self-end p-2 ml-auto rounded-xl flex items-center hover:bg-red-200">
+                                    <span class="material-symbols-outlined inline-block font-bold">close</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
 
-                            </tbody>
-                        </table>
+                    <!-- Actions occur here -->
+                    <div id="attendance-action" class="w-[100%] h-[80%] mt-5 flex flex-col items-center justify-center">
+                        <div class="flex gap-10 items-center">
+                            <h2 class="text-lg"><span class="font-bold">Name- </span><span id="st-name">Panchanan Deka</span></h2>
+                            <h2 class="text-lg"><span class="font-bold">Roll no- </span><span id="st-roll">BCA/01/02</span></h2>
+                            <select id="get-date-month" class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5" onchange="changeMonthToViewDate(this)" data-stdid="">
+                                <option value="">This month</option>
+                                <option value="Jan">January</option>
+                                <option value="Feb">February</option>
+                                <option value="Mar">March</option>
+                                <option value="Apr">April</option>
+                                <option value="May">May</option>
+                                <option value="Jun">June</option>
+                                <option value="Jul">July</option>
+                                <option value="Aug">August</option>
+                                <option value="Sep">September</option>
+                                <option value="Oct">October</option>
+                                <option value="Nov">November</option>
+                                <option value="Dec">December</option>
+                            </select>
+                        </div>
+
+                        <div class="table-body w-[100%] mt-10 mx-3 overflow-x-auto">
+                            <div class="h-[32rem] overflow-y-auto overflow-x-auto department">
+                                <table class="p-[1rem] border-collapse border-[1px] border-black text-left w-[100%]">
+                                    <thead>
+                                        <tr id="table-heading-for-dates"> 
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-body-data-for-dates" class="">                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

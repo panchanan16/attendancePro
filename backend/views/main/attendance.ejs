@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet" href="/output.css">
-    <link rel="stylesheet" href="/css/attendance.css">
+    <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="/extra.css">
     <link rel="stylesheet" href="/css/studentExtra.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -24,17 +23,18 @@
                             placeholder="search for students..">
                         <select class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
                             <option value="">select department</option>
-                            <option value="x">BCA</option>
-                            <option value="x">BCA</option>
-                            <option value="x">BCA</option>
-                            <option value="x">BCA</option>
+                            <% departments.currentSession?.forEach((dep)=> { %>
+                                <option value="<%= dep.department %>">
+                                    <%= dep.department %>
+                                </option>
+                            <% }) %>
                         </select>
                         <select class="bg-[#dae8ff] p-2 text-[#2254ee] rounded-lg font-semibold ml-5">
                             <option value="">select year</option>
-                            <option value="x">BCA</option>
-                            <option value="x">BCA</option>
-                            <option value="x">BCA</option>
-                            <option value="x">BCA</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
                         </select>
                     </div>
                     <div>
@@ -89,7 +89,24 @@
                             <div>
                                 <input class="p-3 border-2 border-[#2254ee] rounded-lg w-[20rem]" type="text" name=""
                                     id="" placeholder="search for students..">
+                            </div>                           
+                            <div class="ml-auto">
+                                <button onclick="closeOverlay('attendance-overlay')"
+                                    class="bg-red-100 text-red-600 self-end p-2 ml-auto rounded-xl flex items-center hover:bg-red-200">
+                                    <span class="material-symbols-outlined inline-block font-bold">close</span>
+                                </button>
                             </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Actions occur here -->
+                    <div class="flex">
+                        <div id="attendance-action" class="w-[90%] h-[80%] mt-5 flex items-center justify-center">
+                        
+                        </div>
+    
+                        <div class="action-button flex flex-col gap-3 mt-10 mr-5">
                             <div>
                                 <a onclick="openSubjectBox('attendance-action')"
                                     class="hover:bg-[#c2d9ff] flex items-center gap-2 p-2 border-2 bg-[#2254ee] text-white font-bold rounded-lg w-[10rem]">
@@ -108,20 +125,19 @@
                                     <span class="material-symbols-outlined text-white">person_add</span>add students
                                 </a>
                             </div>
-
-                            <div class="ml-auto">
-                                <button onclick="closeOverlay('attendance-overlay')"
-                                    class="bg-red-100 text-red-600 self-end p-2 ml-auto rounded-xl flex items-center hover:bg-red-200">
-                                    <span class="material-symbols-outlined inline-block font-bold">close</span>
-                                </button>
+                            <div>
+                                <a onclick="openShowSubjectBox('attendance-action')"
+                                    class="hover:bg-[#c2d9ff] flex items-center gap-2 p-2 border-2 bg-[#2254ee] text-white font-bold rounded-lg w-[10rem]">
+                                    <span class="material-symbols-outlined text-white">library_books</span>view subject
+                                </a>
+                            </div>
+                            <div>
+                                <a onclick="showStudentList('attendance-action')"
+                                    class="hover:bg-[#c2d9ff] flex items-center gap-2 p-2 border-2 bg-[#2254ee] text-white font-bold rounded-lg w-[10rem]">
+                                    <span class="material-symbols-outlined text-white">library_books</span>view students
+                                </a>
                             </div>
                         </div>
-                    </div>
-
-
-                    <!-- Actions occur here -->
-                    <div id="attendance-action" class="w-[100%] h-[80%] mt-5 flex items-center justify-center">
-                        
                     </div>
                 </div>
             </section>
@@ -129,6 +145,7 @@
     </main>
 
     <script src="/js/module/module.js"></script>
+    <script src="/js/common.js"></script>
     <script src="/js/attend.render.js"></script>
     <script src="/js/attend.js"></script>
 </body>

@@ -16,6 +16,7 @@ function showOverlay(id, target) {
 }
 
 function closeOverlay(id, idform) {
+    document.getElementById('attendance-action').innerHTML = ""
     const divId = document.getElementById(id)
     divId.classList.add('hidden')
     divId.classList.remove('flex')
@@ -24,6 +25,7 @@ function closeOverlay(id, idform) {
 
 
 async function addMonthEdit(target) {
+    sdrt
     const monthRow = document.querySelectorAll('#edit-month')
     const month = []
     monthRow.forEach((el) => {

@@ -1,5 +1,3 @@
-
-
 export function insertRecord(actualItem, itemToDbArray, setitemToDbArray) {
     const checkDuplicacy = itemToDbArray.find((item)=> typeof item === 'object' ? item.rollno === actualItem.rollno : item === actualItem)
     if (checkDuplicacy) {

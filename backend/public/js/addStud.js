@@ -20,9 +20,10 @@ function renderStudentsList(students) {
 async function searchStudents(params) {
     const dep = document.getElementById('select-dep').value
     const sem = document.getElementById('select-sem').value
+    const year = getSemester(sem)
     if (dep && sem) {
         const method = new DataCall()
-        const data = await method.GET_POST(`apiv1/get-student-with-filter?dep=${dep}&sem=${sem}`, 'GET', undefined, undefined)
+        const data = await method.GET_POST(`apiv1/get-student-with-filter?dep=${dep}&sem=${year}`, 'GET', undefined, undefined)
         renderStudentsList(data)
     } else {
         alert('Please select department and semester')

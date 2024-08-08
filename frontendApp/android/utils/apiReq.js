@@ -1,4 +1,4 @@
-const HEAD_URL = 'http://192.168.29.214:3000'
+const HEAD_URL = 'http://192.168.74.166:3000'
 
 export async function _POST(url, reqBody) {
     const request = await fetch(`${HEAD_URL}/${url}`, {

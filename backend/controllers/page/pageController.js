@@ -1,11 +1,23 @@
 const Student = require('../../models/main/studentModel')
 const sheetModel = require('../../models/main/sheetsCollectionModel')
-const subModel = require('../../models/main/subjModel')
+const todayTotal = require('../../models/main/totalModel');
 const fs = require('fs')
 
 
 const pageController = {
     dashboard : async (req, res) => {
+        const dbData = await todayTotal.find()
+        const sendData = [];
+        dbData.forEach((el) => {
+            sendData.length > 0 ? sendData.forEach((data) => {
+                const isValid = sendData.find((elem)=>{return elem.department == el.depName})
+                if (!isValid) {
+                    sendData.push({department: el.depName, data: []}) 
+                }
+            }) : sendData.push({department: el.depName, data: []})
+            
+        })
+
         res.render('./main/index');
     },
 
@@ -23,19 +35,27 @@ const pageController = {
 
     attendance : async  (req, res) => {
         const response = await sheetModel.find()
-        res.render('./main/attendance', {response});
+        const data = fs.readFileSync('./currentSession.json', { encoding: 'utf8' })
+        const departments = JSON.parse(data)
+        res.render('./main/attendance', {response, departments});
     },
 
     createAttendance : async  (req, res) => {
-        res.render('./main/createAttendance');
+        const data = fs.readFileSync('./currentSession.json', { encoding: 'utf8' })
+        const departments = JSON.parse(data)
+        res.render('./main/createAttendance', {departments});
     },
 
     addStudent : async  (req, res) => {
-        res.render('./main/addStudents');
+        const data = fs.readFileSync('./currentSession.json', { encoding: 'utf8' })
+        const departments = JSON.parse(data)
+        res.render('./main/addStudents', {departments});
     },
 
     addSubject : async  (req, res) => {
-        res.render('./main/addSubjects');
+        const data = fs.readFileSync('./currentSession.json', { encoding: 'utf8' })
+        const departments = JSON.parse(data)
+        res.render('./main/addSubjects', {departments});
     },
 
     addMonth : async (req, res) => {
@@ -49,7 +69,9 @@ const pageController = {
     },
 
     analytics : async (req, res) => {
-        res.status(200).render('./main/analytics')
+        const data = fs.readFileSync('./currentSession.json', { encoding: 'utf8' })
+        const sendData = JSON.parse(data)
+        res.status(200).render('./main/analytics', {sendData});
     },
 
     settings : async (req, res) => {

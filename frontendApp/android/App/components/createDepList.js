@@ -1,18 +1,26 @@
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { styles, style } from '../screen/createSheet/createSheetStyle';
 import { Dropdown } from 'react-native-element-dropdown';
 import { AttedanceContext } from '../../contexts/attendanceSheetContext';
+import { useIsFocused } from '@react-navigation/native';
+import { AuthContext } from '../../contexts/userContext';
 
 
 const CreateDepList = () => {   
     const [isFocus, setIsFocus] = useState(false);
     const {selecteddepartment, setselecteddepartment} = useContext(AttedanceContext)
+    const {userInfo} = useContext(AuthContext)
 
-    const departmentList = [
-        { label: 'BCA', value: 'bca' },
-        { label: 'BBA', value: 'bba' }
-    ];
+    const departmentList = userInfo && userInfo.departments.map((dep)=> ({label: dep.toUpperCase(), value: dep.toLowerCase()}))
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+      if (isFocused) {
+        setselecteddepartment("") 
+      }
+    }, [isFocused]);
 
     return (
         <Dropdown
@@ -20,7 +28,7 @@ const CreateDepList = () => {
             placeholderStyle={style.placeholderStyle}
             selectedTextStyle={style.selectedTextStyle}
             inputSearchStyle={style.inputSearchStyle}
-            iconStyle={style.iconStyle}
+            iconStyle={style.iconStyle} 
             data={departmentList}
             search
             maxHeight={300}

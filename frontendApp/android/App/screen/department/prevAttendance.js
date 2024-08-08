@@ -13,7 +13,7 @@ const PrevAttendance = ({ route }) => {
     const [attendancePerSub, setAttendancePerSub] = useState([])
     useEffect(() => {
         async function getStudentAttendance() {
-            const req = await _GET(`apiv1/getOverall-Attendance-per-sub?sub=${subject}&q=${department.toLowerCase()}_${sem}_2024`)
+            const req = await _GET(`apiv1/getOverall-Attendance-per-sub?sub=${subject}&q=${department.toLowerCase()}_${sem}_${new Date().getFullYear()}`)
             if (req) { return setAttendancePerSub(req.sendData) }
         }
         getStudentAttendance()

@@ -12,3 +12,17 @@
 .department:hover::-webkit-scrollbar-thumb {
     visibility: visible;
  }
+
+
+.hover:hover {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.length10 {
+    min-width: 10rem;
+}
+
+.length8 {
+    min-width: 8rem;
+}
