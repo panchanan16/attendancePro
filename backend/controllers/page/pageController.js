@@ -6,7 +6,7 @@ const fs = require('fs')
 
 const pageController = {
     dashboard : async (req, res) => {
-        res.redirect('/analysis');
+        res.status(200).render('./main/login');
     },
 
     students : async (req, res) => {

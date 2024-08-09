@@ -4,6 +4,7 @@ const adminController = require('../../controllers/auth/adminCtrl');
 
 adminRouter.post('/admin-signin', adminController.adminSign)
 adminRouter.post('/admin-login', adminController.adminLogin)
+adminRouter.post('/admin-login/dashboard', adminController.adminLoginDashboard)
 adminRouter.post('/admin-info', adminController.admininfo)
 adminRouter.post('/update-admin-info', adminController.updateAdminInfo)
 

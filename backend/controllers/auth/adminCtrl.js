@@ -23,19 +23,38 @@ const adminControl = {
     },
 
     adminLogin: async function (req, res) {
-        const { email, password } = req.body
+        const { email, password } = req.body 
         const response = await adminModel.find({ email: email }, { email: 1, name: 1, password: 1, departments: 1})
         if (response[0]?.password) {
             const verify = await bcrypt.compare(password, response[0].password);
             if (verify) {
                 const token = jwt.sign({ id: response[0]._id, email: response[0].email }, process.env.JWT_TOKEN, { expiresIn: '1h' });
                 res.status(200).send({ msg: "You are Authenticated", token: token, userInfo: response })
-                const dbresponse = await adminModel.updateOne({ _id: response[0]._id }, { token: token })
+                await adminModel.updateOne({ _id: response[0]._id }, { token: token })
             } else {
                 res.status(401).send({ msg: "You are not Authenticated" })
             }
         } else {
             res.status(401).send({ msg: "You are not Authenticated" })
+        }
+
+    },
+
+    adminLoginDashboard: async function (req, res) {
+        const { email, password } = req.body 
+        const response = await adminModel.find({ email: email }, { email: 1, name: 1, password: 1, departments: 1})
+        if (response[0]?.password) {
+            const verify = await bcrypt.compare(password, response[0].password);
+            if (verify) {
+                const token = jwt.sign({ id: response[0]._id, email: response[0].email }, process.env.JWT_TOKEN, { expiresIn: '1h' });
+                res.cookie('dispucollege', token)
+                res.redirect('/analysis');
+                await adminModel.updateOne({ _id: response[0]._id }, { token: token })
+            } else {
+                res.status(401).send({ msg: "You are not Authenticated" })
+            }
+        } else {
+            res.status(401).send({ msg: "Provide valid credentials" })
         }
 
     },

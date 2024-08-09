@@ -3,11 +3,13 @@ const app = express();
 const attendance = require('./utils/arrangeWithDate')
 const compression = require('compression');
 const path = require('path');
+const cookieParser = require('cookie-parser')
 // const cpuProfilerMiddleware = require('./middlewares/checkPerformance');
 require('dotenv').config();
-const connect = require('./config/db.connect')
+require('./config/db.connect')
 
 //App process
+app.use(cookieParser())
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
