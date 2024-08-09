@@ -1,26 +1,36 @@
 import { View, Text, TextInput, Switch, SafeAreaView, ScrollView, TouchableOpacity, Alert } from 'react-native'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import DepartmentList from '../../components/departmentList';
 import { styles } from './profileStyle';
 import { AuthContext } from '../../../contexts/userContext';
 import { DepartmentContext } from '../../../contexts/departmentContext';
-import { _POST } from '../../../utils/apiReq';
+import { _POST, _GET } from '../../../utils/apiReq';
 
 const UpdateProfile = () => {
   const { userInfo, setuserInfo } = useContext(AuthContext)
   const [username, setusername] = useState(userInfo?.name ? userInfo?.name : 'username')
   const [isMale, setMale] = useState(false)
-  const {departToDb} = useContext(DepartmentContext);
+  const {departToDb, setdepartToDb} = useContext(DepartmentContext);
+  const [depList, setdepList] = useState([])
 
   async function profileUpdate() { 
     const depts =  departToDb.length > 0 ? departToDb : userInfo.departments
     const gender = isMale ? 'FEMALE' : 'MALE'
     const req = await _POST('auth/apiv1/update-admin-info', {id: userInfo._id, name: username, departments: depts, gender})
     if (req.status) {
+      setuserInfo({_id: userInfo._id, name: username, departments: depts, gender})
+      setdepartToDb([])
       Alert.alert(req.msg.msg)
-      setuserInfo(null)
     } else { Alert.alert(req.msg.msg) }
   }
+
+  useEffect(()=> {
+    async function getDepList() {
+      const depList = await _GET('apiv1/get-department')
+      setdepList(depList);
+    }
+    getDepList()
+  }, [])
 
   return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -47,10 +57,9 @@ const UpdateProfile = () => {
             </View>
             <ScrollView style={{ width: '100%' }}>
               {
-                ['BCA', 'BBA', 'BCOM', 'BSC', 'BVOC', 'BA'].map((el, key) => (
+                depList?.map((el, key) => (
                   <DepartmentList name={el} key={key} />
                 ))
-
               }
             </ScrollView>
           </View>
@@ -81,4 +90,4 @@ const UpdateProfile = () => {
   )
 }
 
-export default UpdateProfile
+export default UpdateProfile;

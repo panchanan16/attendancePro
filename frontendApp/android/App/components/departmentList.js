@@ -27,4 +27,4 @@ const DepartmentList = ({name}) => {
     )
 }
 
-export default DepartmentList; 
+export default DepartmentList;  

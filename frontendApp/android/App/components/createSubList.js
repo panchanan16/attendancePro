@@ -4,15 +4,23 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { styles, style } from '../screen/createSheet/createSheetStyle';
 import { _GET } from '../../utils/apiReq';
 import { AttedanceContext } from '../../contexts/attendanceSheetContext';
+import { useIsFocused } from '@react-navigation/native';
 
 const CreateSubList = () => {
     const [isFocus, setIsFocus] = useState(false);
     const [subjectList, setsubjectList] = useState([]);
     const {selectedsemester, selectedsubject, selecteddepartment, setselectedsubject} = useContext(AttedanceContext)
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused) {
+            setselectedsubject("") 
+        }
+    }, [isFocused]);
 
     useEffect(()=> {
         async function getsubjectList() {
-            if(selectedsemester === null) { return}
+            if(selecteddepartment === null || selectedsemester === null) { return}
             const req = await _GET(`apiv1/get-subj?dep=${selecteddepartment.toUpperCase()}&sem=${selectedsemester}`)
             if (req) {
                const subTemp = []

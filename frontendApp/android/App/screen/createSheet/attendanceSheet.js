@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Alert } from 'react-native'
+import { View, SafeAreaView, Alert } from 'react-native'
 import { useEffect, useState } from 'react'
 import { SwipeButton } from 'react-native-expo-swipe-button';
 import { Feather } from '@expo/vector-icons';
@@ -21,18 +21,19 @@ const AttendanceSheet = ({ route }) => {
     let todayTotalPresent = 0;
     let todayTotalAbsent = 0;
 
-    studentsToDatabase.forEach((el)=> {
-       todayTotalPresent += el.p
-       todayTotalAbsent += el.a
+    studentsToDatabase.forEach((el) => {
+      todayTotalPresent += el.p
+      todayTotalAbsent += el.a
     })
-    console.log(studentsToDatabase, students.length)
+
     if (studentsToDatabase.length === students.length) {
-      const dataToSend = {subject: displayData.subject, month: new Date().toLocaleString('default', { month: 'short' }), todayTotalPresent, todayTotalAbsent, depName: displayData.depName, lastattendancedate: todayDate, attendance: studentsToDatabase}
+      const dataToSend = { subject: displayData.subject, month: new Date().toLocaleString('default', { month: 'short' }), todayTotalPresent, todayTotalAbsent, depName: displayData.depName, lastattendancedate: todayDate, attendance: studentsToDatabase }
 
       const req = await _POST(`apiv1/set-attendance?q=${displayData.depName}_${displayData.semester}_2024`, dataToSend)
 
       if (req.status) {
         Alert.alert(req.msg.msg)
+        setStudentToDatabase([])
       } else { Alert.alert("Oops! Something went wrong") }
     } else {
       Alert.alert('Please! Select all the students 👌')
@@ -57,7 +58,7 @@ const AttendanceSheet = ({ route }) => {
     <StudentContext.Provider value={{ students, studentsToDatabase, setStudentToDatabase }}>
       <SafeAreaView style={{ flex: 1 }}>
         <DisplayAttendanceHead data={{ p: 0, a: 0 }} displayItem={displayData} />
-        <StudentListForAttendance/>
+        <StudentListForAttendance />
         <View style={{ position: 'absolute', bottom: verticalScale(5), width: '100%' }}>
           <SwipeButton
             Icon={

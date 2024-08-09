@@ -11,7 +11,6 @@ const CreateDepList = () => {
     const [isFocus, setIsFocus] = useState(false);
     const {selecteddepartment, setselecteddepartment} = useContext(AttedanceContext)
     const {userInfo} = useContext(AuthContext)
-
     const departmentList = userInfo && userInfo.departments.map((dep)=> ({label: dep.toUpperCase(), value: dep.toLowerCase()}))
 
     const isFocused = useIsFocused();

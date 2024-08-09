@@ -6,19 +6,7 @@ const fs = require('fs')
 
 const pageController = {
     dashboard : async (req, res) => {
-        const dbData = await todayTotal.find()
-        const sendData = [];
-        dbData.forEach((el) => {
-            sendData.length > 0 ? sendData.forEach((data) => {
-                const isValid = sendData.find((elem)=>{return elem.department == el.depName})
-                if (!isValid) {
-                    sendData.push({department: el.depName, data: []}) 
-                }
-            }) : sendData.push({department: el.depName, data: []})
-            
-        })
-
-        res.render('./main/index');
+        res.redirect('/analysis');
     },
 
     students : async (req, res) => {

@@ -13,7 +13,7 @@ const CreateSemList = () => {
     useEffect(()=> {
         async function getSemesterList() {
             if(selecteddepartment === null) { return; }
-            const req = await _GET('apiv1/get-session-by-name?name=BCA')
+            const req = await _GET(`apiv1/get-session-by-name?name=${selecteddepartment.toUpperCase()}`)
             if (req) {
                const semTemp = []
                req.data.session.length > 0 && req.data.session.forEach((sess) => {
