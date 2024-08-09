@@ -14,7 +14,6 @@ const adminControl = {
         1
         try {
             const response = await createAdmin.save({ timestamps: true })
-            console.log(response);
             res.status(200).send({ msg: `Admin added successfully 👌` })
         } catch (error) {
             console.log(error);
